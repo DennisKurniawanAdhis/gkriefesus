@@ -6,13 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>SB Admin 2 - Login</title>
+  <title>GKRI EFESUS | HALAMAN LOGIN</title>
   <!-- Custom fonts for this template-->
   <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   
-  <!-- Custom styles for this template-->
+  <!-- Custom styles for  this template-->
   <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('admin_assets/img/png-gkri.ico') }}" rel="icon">
 
 </head>
 <style>
@@ -52,7 +53,7 @@
                       </div>
                     @endif
                     <div class="form-group">
-                      <input name="name" type="text" class="form-control form-control-user" id="exampleInputName"  placeholder="Enter Username...">
+                      <input name="username" type="text" class="form-control form-control-user" id="exampleInputName"  placeholder="Enter Username...">
                     </div>
                     <div class="form-group">
                       <input name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">

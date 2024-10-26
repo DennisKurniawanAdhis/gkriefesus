@@ -7,10 +7,10 @@
     <form action="{{ route('keahlian.store') }}" method="POST">
         @csrf
       <!-- ID -->
-      <div class="mb-3">
+      {{-- <div class="mb-3">
           <label for="keahlianID" class="form-label">ID</label>
           <input type="text" name="keahlianID" class="form-control" id="keahlianID" placeholder="ID Keahlian" required>
-      </div>
+      </div> --}}
 
       <div class="mb-3">
           <label for="namaKeahlian" class="form-label">Nama Keahlian</label>
@@ -25,7 +25,6 @@
       <!-- Tombol Save dan Cancel -->
       <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-primary mr-3">Save</button>
-        <button type="reset" class="btn btn-secondary">Cancel</button>
     </div>
   </form>
 </div>

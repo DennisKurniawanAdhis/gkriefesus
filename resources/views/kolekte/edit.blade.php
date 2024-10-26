@@ -32,8 +32,7 @@
         </div>                        
 
         <div class="d-flex align-items-center">             
-            <button type="submit" class="btn btn-primary mr-3">Update</button>             
-            <button type="reset" class="btn btn-secondary">Cancel</button>         
+            <button type="submit" class="btn btn-primary mr-3">Update</button>    
         </div>     
     </form> 
 </div> 

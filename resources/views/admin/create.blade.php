@@ -8,8 +8,8 @@
         @csrf
     
         <div class="mb-3">
-            <label for="name" class="form-label">Username</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Username" required>
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
         </div>
     
         <div class="mb-3">
@@ -31,7 +31,6 @@
     
         <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary mr-3">Save</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
         </div>
     </form>
     

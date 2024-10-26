@@ -15,7 +15,6 @@ class Anggota extends Model
     
     protected $table = 'anggota';
     protected $primaryKey = 'anggotaID'; // Menentukan primary key
-    public $incrementing = false; // Jika primary key bukan auto-increment
     protected $keyType = 'string';
 
     public $timestamps = false; // Nonaktifkan timestamps jika tidak digunakan

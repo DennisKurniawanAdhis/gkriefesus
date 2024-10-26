@@ -49,6 +49,11 @@ class IbadahController extends Controller
     
         $pendeta = Pendeta::all();
         $ibadah = JenisIbadah::all();
+
+
+        if ($pendeta->isEmpty() || $ibadah->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada pendeta ataupun data ibadah');
+        }
         return view('ibadah.create', compact('pendeta','ibadah'));
     }
 

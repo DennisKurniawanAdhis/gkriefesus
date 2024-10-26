@@ -113,6 +113,9 @@
       <!-- Jenis Ibadah -->
       <div class="mb-3">
         <label for="JenisIbadah" class="form-label">Jenis Ibadah</label>
+        @if($jenisIbadah->isEmpty())
+        <p>Belum ada data ibadah</p>
+    @else
         @foreach ($jenisIbadah as $ibadah)
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="jenisIbadah[]" value="{{ $ibadah->ibadahID }}" id="{{ $ibadah->namaIbadah }}" 
@@ -122,11 +125,15 @@
                 </label>
             </div>
         @endforeach
+        @endif
     </div>
     
     
     <div class="mb-3">
         <label for="keahlian" class="form-label">Keahlian</label>
+        @if($keahlian->isEmpty())
+        <p>Belum ada data keahlian</p>
+    @else
         @foreach ($keahlian as $ini)
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="keahlian[]" value="{{ $ini->keahlianID }}" id="{{ $ini->namaKeahlian }}" 
@@ -136,6 +143,7 @@
                 </label>
             </div>
         @endforeach
+        @endif
     </div>
     
       <!-- Keahlian -->
@@ -155,7 +163,6 @@
       <!-- Tombol Save dan Cancel -->
       <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-primary mr-3">Save</button>
-        <button type="reset" class="btn btn-secondary">Cancel</button>
     </div>
   </form>
 </div>

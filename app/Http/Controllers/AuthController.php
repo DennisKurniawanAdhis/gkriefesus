@@ -19,12 +19,12 @@ class AuthController extends Controller
     public function registerSave(Request $request)
     {
         Validator::make($request->all(), [
-            'name' => 'required',
+            'username' => 'required',
             'password' => 'required|confirmed'
         ])->validate();
   
         User::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'password' => Hash::make($request->password),
             'role' => 'super'
         ]);
@@ -40,13 +40,13 @@ class AuthController extends Controller
     public function loginAction(Request $request)
     {
         Validator::make($request->all(), [
-            'name' => 'required',
+            'username' => 'required',
             'password' => 'required'
         ])->validate();
   
-        if (!Auth::attempt($request->only('name', 'password'), $request->boolean('remember'))) {
+        if (!Auth::attempt($request->only('username', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'name' => trans('auth.failed')
+                'username' => trans('auth.failed')
             ]);
         }
   

@@ -24,7 +24,8 @@ class PengeluaranController extends Controller
 
     public function index(Request $request)
 {
-    // Query dasar untuk data pengeluaran
+    // Query dasar untuk data pengeluarangit status
+
     $query = Pengeluaran::with('jenisIbadah');
 
     // Cek apakah ada filter jenis pengeluaran yang dikirim melalui request

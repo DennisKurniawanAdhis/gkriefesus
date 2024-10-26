@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('ibadahID') 
                   ->references('ibadahID')->on('jenisIbadah') 
                   ->onDelete('cascade'); 
-            $table->string('dataIbadahID')->nullable();
+            $table->unsignedBigInteger('dataIbadahID')->nullable();
             $table->foreign('dataIbadahID') 
                   ->references('dataIbadahID')->on('ibadah') 
                   ->onDelete('cascade'); 

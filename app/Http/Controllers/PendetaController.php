@@ -32,9 +32,11 @@ class PendetaController extends Controller
         $search = $request->input('search');
     
         // Query untuk mencari anggota berdasarkan nama depan atau belakang
-        $pendeta = Pendeta::where('namaDepanPendeta', 'LIKE', "%{$search}%")
+        $pendeta = Pendeta::with('alamat')->where('namaDepanPendeta', 'LIKE', "%{$search}%")
                     ->orWhere('namaBelakangPendeta', 'LIKE', "%{$search}%")
                     ->get();
+                    
+
     
         return view('pendeta.index', compact('pendeta'));
     }
@@ -58,9 +60,25 @@ class PendetaController extends Controller
      */
     public function store(Request $request)
 {
+
+    $lastPendeta = \App\Models\Pendeta::orderBy('pendetaID', 'desc')->first();
+
+    // Jika ada pendetaID terakhir, ekstrak bagian numerik dan tambahkan 1
+    if ($lastPendeta) {
+        // Misal: PDT001 -> Ambil 001, tambahkan 1
+        $lastNumber = intval(substr($lastPendeta->pendetaID, 3));
+        $newNumber = $lastNumber + 1;
+
+        // Format dengan tiga digit angka dan awalan 'PDT'
+        $pendetaID = 'PDT' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+    } else {
+        // Jika belum ada pendetaID, mulai dari PDT001
+        $pendetaID = 'PDT001';
+    }
+
     // Buat anggota baru dan simpan
 $pendeta = new Pendeta();
-$pendeta->pendetaID = $request->pendetaID;  // Pastikan anggotaID sesuai dengan input yang benar
+$pendeta->pendetaID = $pendetaID;  // Pastikan anggotaID sesuai dengan input yang benar
 $pendeta->noTelp = $request->noTelp;
 $pendeta->namaDepanPendeta = $request->namaDepanPendeta;
 $pendeta->namaBelakangPendeta = $request->namaBelakangPendeta;
@@ -76,7 +94,7 @@ $pendeta->save();  // Simpan data anggota
 
 // Buat alamat baru dan simpan
 $alamat = new AlamatPendeta();
-$alamat->pendetaID = $pendeta->pendetaID; // Pastikan foreign key sesuai
+$alamat->pendetaID = $pendetaID; // Pastikan foreign key sesuai
 $alamat->kelurahan = $request->kelurahan;
 $alamat->kecamatan = $request->kecamatan;
 $alamat->kota = $request->kota;
@@ -101,14 +119,14 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
         $pendeta = Pendeta::findOrFail($id);
         $alamat = $pendeta->alamat;
 
-        $jenisIbadah = JenisIbadah::withCount(['ibadah' => function ($query) use ($pendeta) {
-            $query->where('pendetaID', $pendeta->pendetaID);
-        }])->get();
+        // $jenisIbadah = JenisIbadah::withCount(['ibadah' => function ($query) use ($pendeta) {
+        //     $query->where('pendetaID', $pendeta->pendetaID);
+        // }])->get();
 
-        $jumlahPernikahan = Pernikahan::where('pendetaID', $pendeta->pendetaID)->count();
-        $jumlahBaptis = CalonBaptis::where('pendetaID', $pendeta->pendetaID)->count();
+        // $jumlahPernikahan = Pernikahan::where('pendetaID', $pendeta->pendetaID)->count();
+        // $jumlahBaptis = CalonBaptis::where('pendetaID', $pendeta->pendetaID)->count();
       
-        return view('pendeta.show', compact('pendeta','alamat','jenisIbadah','jumlahBaptis','jumlahPernikahan'));
+        return view('pendeta.show', compact('pendeta','alamat'));
     }
   
     /**

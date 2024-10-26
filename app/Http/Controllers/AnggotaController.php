@@ -14,26 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
 
-// trait GenerateAnggotaID
-// {
-//     public static function generateAnggotaID()
-//     {
-//         // Get the last anggota ID
-//         $lastAnggota = Anggota::orderBy('anggotaID', 'desc')->first();
-        
-//         if (!$lastAnggota) {
-//             // If no anggota exists yet, start with A001
-//             return 'A001';
-//         }
-        
-//         // Extract the numeric part
-//         $lastNumber = intval(substr($lastAnggota->anggotaID, 1));
-        
-//         // Increment and pad with zeros
-//         $newNumber = $lastNumber + 1;
-//         return 'A' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-//     }
-// }
+
  
 class AnggotaController extends Controller
 {
@@ -88,9 +69,25 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
 {
-    // Buat anggota baru dan simpan
+ 
+    $lastAnggota = Anggota::orderBy('anggotaID', 'desc')->first();
+    if ($lastAnggota) {
+        // Ekstrak bagian numerik dari ibadahID
+        $lastNumber = intval(substr($lastAnggota->anggotaID, 1));
+        
+        // Tambahkan 1 ke nomor terakhir
+        $newNumber = $lastNumber + 1;
+        
+        // Format ulang ibadahID dengan huruf 'B' di depan
+        $anggotaID = 'A' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+    } else {
+        $anggotaID = 'A001';
+    }
+    
+
+
 $anggota = new Anggota();
-$anggota->anggotaID = $request->anggotaID;  // Pastikan anggotaID sesuai dengan input yang benar
+$anggota->anggotaID = $anggotaID;  
 $anggota->noTelp = $request->noTelp;
 $anggota->namaDepanAnggota = $request->namaDepanAnggota;
 $anggota->namaBelakangAnggota = $request->namaBelakangAnggota;
@@ -105,7 +102,7 @@ $anggota->save();  // Simpan data anggota
 
 // Buat alamat baru dan simpan
 $alamat = new AlamatAnggota();
-$alamat->anggotaID = $anggota->anggotaID; // Pastikan foreign key sesuai
+$alamat->anggotaID = $anggotaID; // Pastikan foreign key sesuai
 $alamat->kelurahan = $request->kelurahan;
 $alamat->kecamatan = $request->kecamatan;
 $alamat->kota = $request->kota;
@@ -123,7 +120,7 @@ if ($request->has('jenisIbadah')) {
     // Masukkan data ke junction table anggota_jenisIbadah
     foreach ($jenisIbadahData as $ibadahID) {
         DB::table('anggota_jenisIbadah')->insert([
-            'anggotaID' => $anggota->anggotaID,  // Gunakan anggotaID yang baru disimpan
+            'anggotaID' => $anggotaID,  // Gunakan anggotaID yang baru disimpan
             'ibadahID' => $ibadahID,  // Data ibadahID dari form
         ]);
     }
@@ -137,7 +134,7 @@ if ($request->has('keahlian')) {
     // Masukkan data ke junction table anggota_keahlian
     foreach ($keahlianData as $keahlianID) {
         DB::table('anggota_keahlian')->insert([
-            'anggotaID' => $anggota->anggotaID,  // Gunakan anggotaID yang baru disimpan
+            'anggotaID' => $anggotaID,  // Gunakan anggotaID yang baru disimpan
             'keahlianID' => $keahlianID,  // Data keahlianID dari form
         ]);
     }

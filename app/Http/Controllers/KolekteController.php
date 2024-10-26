@@ -63,6 +63,11 @@ public function index(Request $request)
     ->get();
         $jenisIbadah = JenisIbadah::all();
 
+        if ($ibadah->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada data ibadah yang tersedia.');
+        }
+    
+
         return view('kolekte.create', compact('jenisIbadah','ibadah'));
     }
 

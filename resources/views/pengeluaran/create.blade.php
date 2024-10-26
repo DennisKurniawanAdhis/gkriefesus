@@ -43,7 +43,6 @@
 
         <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary mr-3">Save</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
         </div>
     </form>
 </div>

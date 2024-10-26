@@ -33,7 +33,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ route('jenisIbadah') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Kategori Ibadah</span></a>
+        <span>Jenis Ibadah</span></a>
     </li>
 
     <li class="nav-item">

@@ -37,8 +37,31 @@ class jenisIbadahController extends Controller
     public function store(Request $request)
     {
 
+        $request->validate([
+            'namaIbadah' => 'required|string|max:255',
+            'hari' => 'required|string|max:255',
+            'waktu' => 'required|string|max:255',
+            'lokasi' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+        ]);
+
+        $lastJenisIbadah = JenisIbadah::orderBy('ibadahID', 'desc')->first();
+        if ($lastJenisIbadah) {
+            // Ekstrak bagian numerik dari ibadahID
+            $lastNumber = intval(substr($lastJenisIbadah->ibadahID, 1));
+            
+            // Tambahkan 1 ke nomor terakhir
+            $newNumber = $lastNumber + 1;
+            
+            // Format ulang ibadahID dengan huruf 'B' di depan
+            $ibadahID = 'B' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        } else {
+            $ibadahID = 'B001';
+        }
+        
+        
         $ibadah = new JenisIbadah();
-        $ibadah->ibadahID = $request->ibadahID; 
+        $ibadah->ibadahID = $ibadahID; 
         $ibadah->namaIbadah = $request->namaIbadah;
         $ibadah->hari = $request->hari;
         $ibadah->waktu = $request->waktu;

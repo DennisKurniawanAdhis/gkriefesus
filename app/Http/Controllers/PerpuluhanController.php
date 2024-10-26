@@ -27,6 +27,10 @@ class PerpuluhanController extends Controller
     {
         // 
         $anggota = Anggota::all();
+        if ($anggota->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+        }
+    
         return view('perpuluhan.create', compact('anggota'));
 
     }

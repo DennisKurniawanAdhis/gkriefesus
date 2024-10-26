@@ -10,8 +10,8 @@
 
         <!-- Username -->
         <div class="mb-3">
-            <label for="name" class="form-label">Username</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Nama Depan" value="{{ $admin->name }}" required>
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Nama Depan" value="{{ $admin->username }}" required>
         </div>
 
         <!-- Password -->
@@ -36,7 +36,6 @@
         <!-- Save and Cancel Buttons -->
         <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary mr-3">Save</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
         </div>
     </form>
 </div>

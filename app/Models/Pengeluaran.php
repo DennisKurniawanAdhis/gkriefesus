@@ -12,7 +12,6 @@ class Pengeluaran extends Model
 
     protected $table = 'pengeluaran'; // jika tabel berbeda dari default plural
     protected $primaryKey = 'pengeluaranID'; // atur primary key
-    public $incrementing = false; // jika primary key bukan auto increment
     protected $keyType = 'string';
     public $timestamps = false; // Menonaktifkan timestamps
 
@@ -36,5 +35,9 @@ class Pengeluaran extends Model
     public function jenisIbadah()
     {
         return $this->belongsTo(JenisIbadah::class, 'ibadahID', 'ibadahID');
+    }
+    public function ibadah()
+    {
+        return $this->belongsTo(Ibadah::class, 'dataIbadahID', 'dataIbadahID');
     }
 }

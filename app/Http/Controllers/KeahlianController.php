@@ -30,8 +30,23 @@ class KeahlianController extends Controller
      */
     public function store(Request $request)
     {
+
+        $lastKeahlian = Keahlian::orderBy('keahlianID', 'desc')->first();
+        if ($lastKeahlian) {
+            // Ekstrak bagian numerik dari ibadahID
+            $lastNumber = intval(substr($lastKeahlian->keahlianID, 1));
+            
+            // Tambahkan 1 ke nomor terakhir
+            $newNumber = $lastNumber + 1;
+            
+            // Format ulang ibadahID dengan huruf 'B' di depan
+            $keahlianID = 'K' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        } else {
+            $keahlianID = 'K001';
+        }
+
         $keahlian = new Keahlian();
-        $keahlian->keahlianID = $request->keahlianID; 
+        $keahlian->keahlianID = $keahlianID; 
         $keahlian->namaKeahlian = $request->namaKeahlian;
         $keahlian->deskripsi = $request->deskripsi;
         $keahlian->save();  // Simpan data keahllian

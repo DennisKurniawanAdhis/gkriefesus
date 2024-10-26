@@ -89,37 +89,6 @@
         </div>
         
     </div>
-
-    <div class="text-center my-4">
-        <hr>
-        <span class="label-divider">Pelayanan Pendeta</span>
-        <hr>
-        @foreach ($jenisIbadah as $ibadah)
-        <div class="mb-3 row">
-            <label for="banyakIbadah" class="col-sm-3 col-form-label">Ibadah {{ $ibadah->namaIbadah }}</label>
-            <div class="col-sm-9 d-flex align-items-center">
-                <input type="text" name="banyakIbadah" class="form-control w-25 me-2" value="{{ $ibadah->ibadah_count }}" readonly>
-                <label class="ml-2 mt-2">Kali</label>
-            </div>
-        </div>
-    @endforeach
-
-   
-        <div class="mb-3 row">
-            <label for="pernikahan" class="col-sm-3 col-form-label">Pernikahan</label>
-            <div class="col-sm-9 d-flex align-items-center">
-                <input type="text" name="pernikahan" class="form-control w-25 me-2" value="{{ $jumlahPernikahan }}" readonly>
-                <label class="ml-2 mt-2">Kali</label>
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="baptis" class="col-sm-3 col-form-label">Baptis</label>
-            <div class="col-sm-9 d-flex align-items-center">
-                <input type="text" name="baptis" class="form-control w-25 me-2" value="{{ $jumlahBaptis  }}" readonly>
-                <label class="ml-2 mt-2">Kali</label>
-            </div>
-        </div>
     
     </div>
 

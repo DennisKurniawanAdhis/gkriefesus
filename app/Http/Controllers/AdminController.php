@@ -37,8 +37,24 @@
        */
       public function store(Request $request)
       {
+
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:255',
+            'password' =>  [
+              'required',
+              'string',
+              'min:6',
+              'regex:/[A-Z]/'
+            ],
+        ], [
+            'password.required' => 'Password diperlukan.',
+            'password.min' => 'Password harus minimal 6 karakter.',
+            'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
+        ]);
+      
+
         $admin = new User();
-        $admin->name = $request->name;
+        $admin->username = $request->username;
         $admin->password = Hash::make($request->password); // Hash password dengan benar
         $admin->role = $request->role;
         $admin->save();  // Simpan data anggota
@@ -74,16 +90,24 @@
       {
           // Validasi input
           $validatedData = $request->validate([
-              'name' => 'required|string|max:255',
-              'password' => 'nullable|string|min:2',  // Password opsional saat update
-              'role' => 'required|string|in:keanggotaan,keuangan,super',
-          ]);
+              'username' => 'required|string|max:255',
+              'password' =>  [
+                'required',
+                'string',
+                'min:6',
+                'regex:/[A-Z]/'
+            ],
+        ], [
+            'password.required' => 'Password diperlukan.',
+            'password.min' => 'Password harus minimal 6 karakter.',
+            'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
+        ]);
       
           // Temukan user berdasarkan ID
           $admin = User::findOrFail($id);
       
           // Update nama
-          $admin->name = $validatedData['name'];
+          $admin->username = $validatedData['username'];
       
           // Update password jika ada
           if (!empty($validatedData['password'])) {
@@ -104,13 +128,26 @@
       /**
        * Remove the specified resource from storage.
        */
-      public function destroy(string $id)
-      {
-          $admin = User::findOrFail($id);
-    
-          $admin->delete();
-    
-          return redirect()->route('admin')->with('success', 'Admin Anggota deleted successfully');
-      }
+     public function destroy(string $id)
+{
+    $admin = User::findOrFail($id);
+
+    // Cek apakah admin yang ingin dihapus memiliki role 'super'
+    if ($admin->role === 'super') {
+        // Cek apakah ada admin lain dengan role 'super'
+        $superAdminCount = User::where('role', 'super')->count();
+
+        // Jika ini adalah satu-satunya admin 'super', maka jangan izinkan penghapusan
+        if ($superAdminCount <= 1) {
+            return redirect()->route('admin')->with('error', 'Tidak dapat menghapus admin dengan role "super" karena ini adalah satu-satunya admin.');
+        }
+    }
+
+    // Hapus admin jika tidak memenuhi syarat di atas
+    $admin->delete();
+
+    return redirect()->route('admin')->with('success', 'Admin Anggota deleted successfully');
+}
+
   }
   

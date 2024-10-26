@@ -8,10 +8,10 @@
         @csrf
         
         <!-- ID Komisi -->
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label for="komisiID" class="form-label">ID Komisi</label>
             <input type="text" name="komisiID" class="form-control" id="komisiID" placeholder="ID Komisi" required>
-        </div>
+        </div> --}}
 
         <!-- Nama Komisi -->
         <div class="mb-3">
@@ -88,7 +88,6 @@
         <!-- Tombol Save dan Cancel -->
         <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-primary mr-3">Save</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
         </div>
     </form>
 </div>

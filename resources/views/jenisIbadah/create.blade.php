@@ -7,10 +7,10 @@
     <form action="{{ route('jenisIbadah.store') }}" method="POST">
         @csrf
       <!-- ID -->
-      <div class="mb-3">
+      {{-- <div class="mb-3">
         <label for="ibadahID" class="form-label">ID</label>
         <input type="text" name="ibadahID" class="form-control" id="ibadahID" placeholder="ID Ibadah" required>
-    </div>
+    </div> --}}
 
     <div class="mb-3">
         <label for="namaIbadah" class="form-label">Nama Ibadah</label>
@@ -45,7 +45,6 @@
 
     <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-primary mr-3">Save</button>
-        <button type="reset" class="btn btn-secondary">Cancel</button>
     </div>
 
   </form>

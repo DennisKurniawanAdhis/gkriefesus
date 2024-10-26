@@ -3,7 +3,7 @@
 @section('title', 'Show Kolekte')
   
 @section('contents')
-    <h1 class="mb-0">Detail Perpuluhan</h1>
+    <h1 class="mb-0">Detail Kolekte</h1>
 
 
     <div class="container">

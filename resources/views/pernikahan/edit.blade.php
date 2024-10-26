@@ -13,7 +13,7 @@
           <input type="text" name="pernikahanID" class="form-control" id="pernikahanID" placeholder="ID Pernikahan" value="{{ $pernikahan->pernikahanID }}" readonly>
       </div>
 
-      <div class="row mb-3">
+      {{-- <div class="row mb-3">
         <!-- Dropdown untuk Pria (Suami) -->
         <div class="col-md-3">
             <label for="anggotaID_suami" class="form-label">Nama Pasangan Pria</label>
@@ -21,7 +21,7 @@
         <div class="col-md-4">
             <select name="anggotaID_suami" class="form-select" id="anggotaID_suami" required>
                 @foreach ($pria as $p)
-                    <option value="{{ $p->anggotaID }}" {{ $suamiTerpilih &&$suamiTerpilih->anggotaID == $p->anggotaID ? 'selected' : '' }}>
+                    <option value="{{ $p->anggotaID }}" {{ $p->anggotaID_suami == $suamiTerpilih->anggotaID->namaDepanAnggota ? 'selected' : '' }}>
                         {{ $p->namaDepanAnggota }} {{ $p->namaBelakangAnggota }}
                     </option>
                 @endforeach
@@ -37,7 +37,41 @@
         <div class="col-md-4">
             <select name="anggotaID_istri" class="form-select" id="anggotaID_istri" required>
                 @foreach ($wanita as $w)
-                    <option value="{{ $w->anggotaID }}" {{ $istriTerpilih && $istriTerpilih->anggotaID == $w->anggotaID ? 'selected' : '' }}>
+                    <option value="{{ $w->anggotaID }}" {{ $w->anggotaID_istri == $istriTerpilih->anggotaID->namaDepanAnggota ? 'selected' : '' }}>
+                        {{ $w->namaDepanAnggota }} {{ $w->namaBelakangAnggota }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div> --}}
+
+    <div class="row mb-3">
+        <!-- Dropdown untuk Pria (Suami) -->
+        <div class="col-md-3">
+            <label for="anggotaID_suami" class="form-label">Nama Pasangan Pria</label>
+        </div>
+        <div class="col-md-4">
+            <select name="anggotaID_suami" class="form-select" id="anggotaID_suami" required>
+                @foreach ($pria as $p)
+                    <option value="{{ $p->anggotaID }}" 
+                        {{ $pernikahan->anggotaID_suami == $p->anggotaID ? 'selected' : '' }}>
+                        {{ $p->namaDepanAnggota }} {{ $p->namaBelakangAnggota }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <!-- Dropdown untuk Wanita (Istri) -->
+        <div class="col-md-3">
+            <label for="anggotaID_istri" class="form-label">Nama Pasangan Wanita</label>
+        </div>
+        <div class="col-md-4">
+            <select name="anggotaID_istri" class="form-select" id="anggotaID_istri" required>
+                @foreach ($wanita as $w)
+                    <option value="{{ $w->anggotaID }}" 
+                        {{ $pernikahan->anggotaID_istri == $w->anggotaID ? 'selected' : '' }}>
                         {{ $w->namaDepanAnggota }} {{ $w->namaBelakangAnggota }}
                     </option>
                 @endforeach
@@ -123,7 +157,6 @@
       <!-- Tombol Save dan Cancel -->
       <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-primary mr-3">Save</button>
-        <button type="reset" class="btn btn-secondary">Cancel</button>
     </div>
   </form>
 </div>

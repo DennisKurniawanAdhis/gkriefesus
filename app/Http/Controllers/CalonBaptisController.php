@@ -43,6 +43,8 @@ class CalonBaptisController extends Controller
                 });
             })
             ->get();
+
+            
     
         return view('calonBaptis.index', compact('baptis'));
     }
@@ -60,7 +62,10 @@ class CalonBaptisController extends Controller
         
         $pendeta = Pendeta::all();
         return view('calonBaptis.create', compact('anggota', 'pendeta'));
-
+       
+        if ($anggota->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+        }
     }
 
     /**
@@ -68,10 +73,24 @@ class CalonBaptisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+
+        $lastBaptis = CalonBaptis::orderBy('baptisID', 'desc')->first();
+        if ($lastBaptis) {
+            // Ekstrak bagian numerik dari ibadahID
+            $lastNumber = intval(substr($lastBaptis->baptisID, 2));
+            
+            // Tambahkan 1 ke nomor terakhir
+            $newNumber = $lastNumber + 1;
+            
+            // Format ulang ibadahID dengan huruf 'B' di depan
+            $baptisID = 'CB' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        } else {
+            $baptisID = 'CB001';
+        }
 
 $baptis = new CalonBaptis();
-$baptis->baptisID = $request->baptisID; 
+$baptis->baptisID = $baptisID; 
 $baptis->anggotaID = $request->anggotaID;
 $baptis->pendetaID = $request->pendetaID;
 $baptis->namaAyah = $request->namaAyah;
@@ -81,7 +100,7 @@ $baptis->save();  // Simpan data anggota
 
 // Buat alamat baru dan simpan
 $alamat = new AlamatCalonBaptis();
-$alamat->baptisID = $baptis->baptisID; // Pastikan foreign key sesuai
+$alamat->baptisID = $baptisID; // Pastikan foreign key sesuai
 $alamat->kelurahan = $request->kelurahan;
 $alamat->kecamatan = $request->kecamatan;
 $alamat->kota = $request->kota;

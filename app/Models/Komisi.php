@@ -10,7 +10,6 @@ class Komisi extends Model
     use HasFactory;
     protected $table = 'komisi';
     protected $primaryKey = 'komisiID'; // Menentukan primary key
-    public $incrementing = false; // Jika primary key bukan auto-increment
     protected $keyType = 'string';
 
     public $timestamps = false; // Nonaktifkan timestamps jika tidak digunakan

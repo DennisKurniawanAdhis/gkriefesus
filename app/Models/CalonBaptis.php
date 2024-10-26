@@ -12,7 +12,6 @@ class CalonBaptis extends Model
 
     protected $table = 'calonBaptis';
     protected $primaryKey = 'baptisID'; // Menentukan primary key
-    public $incrementing = false; // Jika primary key bukan auto-increment
     protected $keyType = 'string';
 
     public $timestamps = false; // Nonaktifkan timestamps jika tidak digunakan

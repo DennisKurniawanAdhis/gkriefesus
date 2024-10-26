@@ -15,9 +15,19 @@ class KomisiController extends Controller
      */
     public function index()
     {
-        $komisi = Komisi::with(['anggota'])->get();
+        $komisi = Komisi::with('anggota')->get();
+        
+        $dataKomisi = $komisi->map(function($k) {
+            return [
+                'komisi' => $k,
+                'ketua' => $k->anggota->where('jabatan', 'Ketua')->first(),
+                'wakil' => $k->anggota->where('jabatan', 'Wakil Ketua')->first(),
+                'bendahara' => $k->anggota->where('jabatan', 'Bendahara')->first(),
+                'sekretaris' => $k->anggota->where('jabatan', 'Sekretaris')->first()
+            ];
+        });
 
-         return view('komisi.index', compact('komisi'));
+         return view('komisi.index', compact('komisi','dataKomisi'));
     }
   
     /**
@@ -26,6 +36,10 @@ class KomisiController extends Controller
     public function create()
     {
         $anggota = Anggota::whereNull('komisiID')->get();
+
+        if ($anggota->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+        }
     
         // Kirim data anggota ke view
         return view('komisi.create', compact('anggota'));
@@ -38,7 +52,7 @@ class KomisiController extends Controller
     {
         // Validasi input
         $request->validate([
-            'komisiID' => 'required|unique:komisi,komisiID',
+            // 'komisiID' => 'required|unique:komisi,komisiID',
             'namaKomisi' => 'required|string|max:255',
             'ketua' => 'required|exists:anggota,anggotaID',
             'wakil_ketua' => 'required|exists:anggota,anggotaID',
@@ -46,10 +60,24 @@ class KomisiController extends Controller
             'sekretaris' => 'required|exists:anggota,anggotaID',
             'deskripsi' => 'required|string',
         ]);
+
+        $lastKomisi = Komisi::orderBy('komisiID', 'desc')->first();
+        if ($lastKomisi) {
+            // Ekstrak bagian numerik dari ibadahID
+            $lastNumber = intval(substr($lastKomisi->komisiID, 2));
+            
+            // Tambahkan 1 ke nomor terakhir
+            $newNumber = $lastNumber + 1;
+            
+            // Format ulang ibadahID dengan huruf 'B' di depan
+            $komisiID = 'KS' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        } else {
+            $komisiID = 'KS001';
+        }
     
         // Simpan data Komisi
         $komisi = new Komisi();
-        $komisi->komisiID = $request->komisiID;
+        $komisi->komisiID = $komisiID;
         $komisi->namaKomisi = $request->namaKomisi;
         $komisi->deskripsi = $request->deskripsi;
         $komisi->save();
@@ -59,25 +87,25 @@ class KomisiController extends Controller
         
         // Update Ketua
         $ketua = Anggota::find($request->ketua);
-        $ketua->komisiID = $komisi->komisiID;
+        $ketua->komisiID = $komisiID;
         $ketua->jabatan = 'Ketua';
         $ketua->save();
     
         // Update Wakil Ketua
         $wakil_ketua = Anggota::find($request->wakil_ketua);
-        $wakil_ketua->komisiID = $komisi->komisiID;
+        $wakil_ketua->komisiID = $komisiID;
         $wakil_ketua->jabatan = 'Wakil Ketua';
         $wakil_ketua->save();
     
         // Update Bendahara
         $bendahara = Anggota::find($request->bendahara);
-        $bendahara->komisiID = $komisi->komisiID;
+        $bendahara->komisiID = $komisiID;
         $bendahara->jabatan = 'Bendahara';
         $bendahara->save();
     
         // Update Sekretaris
         $sekretaris = Anggota::find($request->sekretaris);
-        $sekretaris->komisiID = $komisi->komisiID;
+        $sekretaris->komisiID = $komisiID;
         $sekretaris->jabatan = 'Sekretaris';
         $sekretaris->save();
     

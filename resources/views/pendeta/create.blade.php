@@ -7,10 +7,10 @@
     <form action="{{ route('pendeta.store') }}" method="POST">
         @csrf
       <!-- ID -->
-      <div class="mb-3">
+      {{-- <div class="mb-3">
           <label for="pendetaID" class="form-label">ID</label>
           <input type="text" name="pendetaID" class="form-control" id="pendetaID" placeholder="ID Pendeta" required>
-      </div>
+      </div> --}}
 
       <!-- Nama Depan dan Belakang -->
       <div class="row">
@@ -126,7 +126,6 @@
       <!-- Tombol Save dan Cancel -->
       <div class="d-flex align-items-center">
         <button type="submit" class="btn btn-primary mr-3">Save</button>
-        <button type="reset" class="btn btn-secondary">Cancel</button>
     </div>
   </form>
 </div>
