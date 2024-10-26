@@ -59,7 +59,7 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $rs->pengeluaranID }}">
                                     <li>
-                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#detailModal{{ $rs->kasID }}">
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#detailModal{{ $rs->pengeluaranID }}">
                                             <i class="bi bi-eye"></i> Detail
                                         </a>
                                     </li>
@@ -82,11 +82,11 @@
                             </div>
                         </td>
                     </tr>
-                    <div class="modal fade" id="detailModal{{ $rs->kasID }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $rs->kasID }}" aria-hidden="true">
+                    <div class="modal fade" id="detailModal{{ $rs->pengeluaranID }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $rs->pengeluaranID }}" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="detailModalLabel{{ $rs->kasID }}">Detail Anggota</h5>
+                                    <h5 class="modal-title" id="detailModalLabel{{ $rs->pengeluaranID }}">Detail Anggota</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -102,7 +102,7 @@
                                         <div class="mb-3 row">
                                             <label for="tanggal" class="col-sm-3 col-form-label">Tanggal Pengeluaran </label>
                                             <div class="col-sm-9">
-                                                <input type="text" name="tanggal" class="form-control" id="tanggal" value="{{ $rs->formatted_tanggal}}" readonly>
+                                                <input type="text" name="tanggal" class="form-control" id="tanggal" value="{{ $rs->formatted_tanggal }}" readonly>
                                             </div>
                                         </div>
                                 

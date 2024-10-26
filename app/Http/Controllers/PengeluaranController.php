@@ -24,17 +24,14 @@ class PengeluaranController extends Controller
 
     public function index(Request $request)
 {
-    // Query dasar untuk data pengeluarangit status
-
+    // Query dasar untuk data pengeluaran
     $query = Pengeluaran::with('jenisIbadah');
 
-    // Cek apakah ada filter jenis pengeluaran yang dikirim melalui request
+    // Filter berdasarkan jenis pengeluaran
     if ($request->filled('filterPengeluaran')) {
-        if ($request->filterPengeluaran == 'kas') {
-            // Filter pengeluaran yang bukan untuk ibadah (jenis pengeluaran kas)
+        if ($request->filterPengeluaran === 'kas') {
             $query->whereNull('ibadahID');
         } else {
-            // Filter pengeluaran berdasarkan ibadah yang dipilih
             $query->whereHas('jenisIbadah', function ($q) use ($request) {
                 $q->where('namaIbadah', $request->filterPengeluaran);
             });
@@ -44,12 +41,13 @@ class PengeluaranController extends Controller
     // Ambil semua jenis ibadah untuk dropdown filter
     $jenisIbadah = JenisIbadah::all();
 
-    // Eksekusi query dan dapatkan data pengeluaran
-    $pengeluaran = $query->get();
+    // Eksekusi query dan urutkan tanggal pengeluaran terbaru
+    $pengeluaran = $query->orderBy('tanggal', 'desc')->get();
 
     // Return view dengan data pengeluaran dan jenis ibadah untuk filter
     return view('pengeluaran.index', compact('pengeluaran', 'jenisIbadah'));
 }
+
 
 
     /**

@@ -22,6 +22,11 @@ class Pengeluaran extends Model
         'jenisPengeluaran',
         'jumlahUang' // Pastikan nama kolom benar
     ];
+    // Di dalam model Pengeluaran
+protected $casts = [
+    'tanggal' => 'date',
+];
+
 
     public function getFormattedTanggalAttribute()
     {
