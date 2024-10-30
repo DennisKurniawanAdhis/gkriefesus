@@ -91,17 +91,19 @@
           // Validasi input
           $validatedData = $request->validate([
               'username' => 'required|string|max:255',
-              'password' =>  [
-                'required',
-                'string',
-                'min:6',
-                'regex:/[A-Z]/'
-            ],
-        ], [
-            'password.required' => 'Password diperlukan.',
-            'password.min' => 'Password harus minimal 6 karakter.',
-            'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
-        ]);
+              'password' => [
+                  'required',
+                  'string',
+                  'min:6',
+                  'regex:/[A-Z]/'
+              ],
+              'role' => 'required|string', // Add role validation
+          ], [
+              'password.required' => 'Password diperlukan.',
+              'password.min' => 'Password harus minimal 6 karakter.',
+              'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
+              'role.required' => 'Role harus dipilih.', // Add role error message
+          ]);
       
           // Temukan user berdasarkan ID
           $admin = User::findOrFail($id);

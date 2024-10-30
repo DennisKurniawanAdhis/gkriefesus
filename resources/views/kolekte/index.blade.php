@@ -37,7 +37,7 @@
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
-                <th>#</th>
+                <th>No</th>
                 <th>Nama Ibadah</th>
                 <th>Tanggal Kolekte</th>
                 <th>Jumlah Uang</th>

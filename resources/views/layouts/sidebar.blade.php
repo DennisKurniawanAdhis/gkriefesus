@@ -11,26 +11,19 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
     
-    <!-- Nav Item - Dashboard -->
-    {{-- <li class="nav-item">
-      <a class="nav-link" href="{{ route('super') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
-    </li>
-     --}}
-  
-
-    <li class="nav-item">
+    <li class="nav-item {{ Request::is('admin') ? 'active' : '' }}">
       <a class="nav-link" href="{{ route('admin') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Admin</span></a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('logout') }}">
+          <i class="fa-solid fa-user"></i>
+          <span>Admin</span>
+      </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="#" onclick="confirmLogout(event)">
         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-        <span>Logout</span></a>
-    </li>
+        <span>Logout</span>
+    </a>
+</li>
     
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -42,3 +35,14 @@
     
     
   </ul>
+
+  <script>
+    function confirmLogout(event) {
+        event.preventDefault(); // Mencegah link default
+        const confirmation = confirm("Apakah Anda yakin ingin logout?");
+        if (confirmation) {
+            // Jika pengguna mengkonfirmasi, arahkan ke route logout
+            window.location.href = "{{ route('logout') }}";
+        }
+    }
+    </script>
