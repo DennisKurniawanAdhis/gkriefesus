@@ -116,18 +116,18 @@ class KomisiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $komisi = Komisi::with(['anggota'])->findOrFail($id);    
+    // public function show(string $id)
+    // {
+    //     $komisi = Komisi::with(['anggota'])->findOrFail($id);    
 
-        $ketua = $komisi->anggota->where('jabatan', 'Ketua')->first();
-        $wakilKetua = $komisi->anggota->where('jabatan', 'Wakil Ketua')->first();
-        $bendahara = $komisi->anggota->where('jabatan', 'Bendahara')->first();
-        $sekretaris = $komisi->anggota->where('jabatan', 'Sekretaris')->first();
+    //     $ketua = $komisi->anggota->where('jabatan', 'Ketua')->first();
+    //     $wakilKetua = $komisi->anggota->where('jabatan', 'Wakil Ketua')->first();
+    //     $bendahara = $komisi->anggota->where('jabatan', 'Bendahara')->first();
+    //     $sekretaris = $komisi->anggota->where('jabatan', 'Sekretaris')->first();
 
   
-        return view('komisi.show', compact('komisi','ketua','wakilKetua','bendahara','sekretaris'));
-    }
+    //     return view('komisi.show', compact('komisi','ketua','wakilKetua','bendahara','sekretaris'));
+    // }
   
     /**
      * Show the form for editing the specified resource.

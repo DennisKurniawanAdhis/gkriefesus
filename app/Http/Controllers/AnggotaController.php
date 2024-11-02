@@ -150,17 +150,17 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $anggota = Anggota::with('keahlian', 'jenisIbadah','komisi')->findOrFail($id); // pastikan $id adalah id anggota
+    // public function show(string $id)
+    // {
+    //     $anggota = Anggota::with('keahlian', 'jenisIbadah','komisi')->findOrFail($id); // pastikan $id adalah id anggota
 
-        $alamat = $anggota->alamat;
-    $jenisIbadah = $anggota->jenisIbadah->pluck('namaIbadah')->implode(', ');
-    $keahlian = $anggota->keahlian->pluck('namaKeahlian')->implode(', ');
+    //     $alamat = $anggota->alamat;
+    // $jenisIbadah = $anggota->jenisIbadah->pluck('namaIbadah')->implode(', ');
+    // $keahlian = $anggota->keahlian->pluck('namaKeahlian')->implode(', ');
 
     
-        return view('anggota.show', compact('anggota','alamat','keahlian','jenisIbadah'));
-    }
+    //     return view('anggota.show', compact('anggota','alamat','keahlian','jenisIbadah'));
+    // }
   
     /**
      * Show the form for editing the specified resource.

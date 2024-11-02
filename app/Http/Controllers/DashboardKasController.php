@@ -19,17 +19,42 @@ class DashboardKasController extends Controller
             Carbon::parse($request->input('tanggalAkhir'))->endOfDay() : null;
 
         // Ambil semua jenis ibadah
-        $ibadah = JenisIbadah::all();
+        $jenisIbadah = JenisIbadah::all();
 
-        // Query untuk kolekte berdasarkan ibadah
-        $queryKolekte = Kas::select('ibadahID', DB::raw('SUM(jumlahUang) as totalKolekte'))
-            ->where('jenisUang', 'kolekte')
-            ->groupBy('ibadahID');
+        // Array untuk menyimpan perhitungan kas per ibadah
+        $kasPerIbadah = [];
 
-        if ($tanggalAwal && $tanggalAkhir) {
-            $queryKolekte->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
+        // Hitung kas untuk setiap jenis ibadah
+        foreach ($jenisIbadah as $ibadah) {
+            // Query untuk kolekte berdasarkan jenis ibadah
+            $queryKolekte = Kas::where('ibadahID', $ibadah->ibadahID)
+                ->where('jenisUang', 'kolekte');
+            
+            // Query untuk pengeluaran berdasarkan jenis ibadah
+            $queryPengeluaran = Pengeluaran::where('ibadahID', $ibadah->ibadahID)
+                ->where('jenisPengeluaran', 'kolekte');
+
+            // Terapkan filter tanggal jika ada
+            if ($tanggalAwal && $tanggalAkhir) {
+                $queryKolekte->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
+                $queryPengeluaran->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
+            }
+
+            // Hitung total kolekte dan pengeluaran
+            $totalKolekte = $queryKolekte->sum('jumlahUang');
+            $totalPengeluaran = $queryPengeluaran->sum('jumlahUang');
+
+            // Hitung saldo akhir (kolekte - pengeluaran)
+            $saldoAkhir = $totalKolekte - $totalPengeluaran;
+
+            // Simpan data ke array
+            $kasPerIbadah[$ibadah->ibadahID] = [
+                'namaIbadah' => $ibadah->namaIbadah,
+                'totalKolekte' => $totalKolekte,
+                'totalPengeluaran' => $totalPengeluaran,
+                'saldoAkhir' => $saldoAkhir
+            ];
         }
-        $jumlahKolekteIbadah = $queryKolekte->get();
 
         // Query untuk perpuluhan
         $queryPerpuluhan = Kas::where('jenisUang', 'perpuluhan');
@@ -45,69 +70,25 @@ class DashboardKasController extends Controller
         }
         $totalSumbangan = $querySumbangan->sum('jumlahUang');
 
-        // Query untuk pengeluaran kolekte per ibadah
-        $queryPengeluaranKolekte = DB::table('pengeluaran')
-            ->join('jenisIbadah', 'pengeluaran.ibadahID', '=', 'jenisIbadah.ibadahID')
-            ->select('pengeluaran.ibadahID', DB::raw('SUM(pengeluaran.jumlahUang) as totalPengeluaran'))
-            ->where('pengeluaran.jenisPengeluaran', 'kolekte')
-            ->groupBy('pengeluaran.ibadahID');
-
-        if ($tanggalAwal && $tanggalAkhir) {
-            $queryPengeluaranKolekte->whereBetween('pengeluaran.tanggal', [$tanggalAwal, $tanggalAkhir]);
-        }
-        
-        $pengeluaranKolekteTiapIbadah = $queryPengeluaranKolekte->get();
-
-        // Convert pengeluaran ke array untuk kemudahan akses
-        $pengeluaranArray = [];
-        foreach ($pengeluaranKolekteTiapIbadah as $pengeluaran) {
-            $pengeluaranArray[$pengeluaran->ibadahID] = $pengeluaran->totalPengeluaran;
-        }
-
-        // Query untuk total pengeluaran kas (non-kolekte)
+        // Query untuk pengeluaran kas umum
         $queryPengeluaranKas = Pengeluaran::where('jenisPengeluaran', 'kas');
         if ($tanggalAwal && $tanggalAkhir) {
             $queryPengeluaranKas->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
         }
         $pengeluaranKas = $queryPengeluaranKas->sum('jumlahUang');
 
-        // Query untuk detail semua pengeluaran
-        $queryDetailPengeluaran = Pengeluaran::query()
-            ->leftJoin('jenisIbadah', 'pengeluaran.ibadahID', '=', 'jenisIbadah.ibadahID')
-            ->select(
-                'pengeluaran.*',
-                'jenisIbadah.namaIbadah'
-            )
-            ->orderBy('tanggal', 'desc');
-
-        if ($tanggalAwal && $tanggalAkhir) {
-            $queryDetailPengeluaran->whereBetween('pengeluaran.tanggal', [$tanggalAwal, $tanggalAkhir]);
-        }
-        
-        $detailPengeluaran = $queryDetailPengeluaran->get();
-
-        // Hitung total kas keseluruhan (perpuluhan + sumbangan)
-        $queryKasKeseluruhan = Kas::whereIn('jenisUang', ['perpuluhan', 'sumbangan']);
-        if ($tanggalAwal && $tanggalAkhir) {
-            $queryKasKeseluruhan->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
-        }
-        $jumlahKasKeseluruhan = $queryKasKeseluruhan->sum('jumlahUang');
-
+        // Hitung total kas keseluruhan
+        $jumlahKasKeseluruhan = $totalPerpuluhan + $totalSumbangan;
         $totalPengeluaranKas = $jumlahKasKeseluruhan - $pengeluaranKas;
 
         return view('DashboardKas.index', compact(
-            'jumlahKolekteIbadah',
-            'ibadah',
-            'totalPerpuluhan',
-            'totalSumbangan',
-            'tanggalAwal',
-            'tanggalAkhir',
-            'jumlahKasKeseluruhan',
-            'pengeluaranKas',
-            'totalPengeluaranKas',
-            'pengeluaranKolekteTiapIbadah',
-            'pengeluaranArray',
-            'detailPengeluaran'
+            'kasPerIbadah',          // Array berisi data kas per ibadah
+            'tanggalAwal',           // Tanggal awal filter
+            'tanggalAkhir',          // Tanggal akhir filter
+            'totalPerpuluhan',       // Total perpuluhan
+            'totalSumbangan',        // Total sumbangan
+            'pengeluaranKas',        // Total pengeluaran kas umum
+            'totalPengeluaranKas'    // Saldo akhir kas umum
         ));
     }
 }

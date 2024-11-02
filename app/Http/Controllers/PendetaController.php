@@ -114,20 +114,20 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $pendeta = Pendeta::findOrFail($id);
-        $alamat = $pendeta->alamat;
+    // public function show(string $id)
+    // {
+    //     $pendeta = Pendeta::findOrFail($id);
+    //     $alamat = $pendeta->alamat;
 
-        // $jenisIbadah = JenisIbadah::withCount(['ibadah' => function ($query) use ($pendeta) {
-        //     $query->where('pendetaID', $pendeta->pendetaID);
-        // }])->get();
+    //     // $jenisIbadah = JenisIbadah::withCount(['ibadah' => function ($query) use ($pendeta) {
+    //     //     $query->where('pendetaID', $pendeta->pendetaID);
+    //     // }])->get();
 
-        // $jumlahPernikahan = Pernikahan::where('pendetaID', $pendeta->pendetaID)->count();
-        // $jumlahBaptis = CalonBaptis::where('pendetaID', $pendeta->pendetaID)->count();
+    //     // $jumlahPernikahan = Pernikahan::where('pendetaID', $pendeta->pendetaID)->count();
+    //     // $jumlahBaptis = CalonBaptis::where('pendetaID', $pendeta->pendetaID)->count();
       
-        return view('pendeta.show', compact('pendeta','alamat'));
-    }
+    //     return view('pendeta.show', compact('pendeta','alamat'));
+    // }
   
     /**
      * Show the form for editing the specified resource.

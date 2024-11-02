@@ -59,12 +59,12 @@ class KeahlianController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $keahlian = Keahlian::findOrFail($id);
+    // public function show(string $id)
+    // {
+    //     $keahlian = Keahlian::findOrFail($id);
   
-        return view('keahlian.show', compact('keahlian'));
-    }
+    //     return view('keahlian.show', compact('keahlian'));
+    // }
   
     /**
      * Show the form for editing the specified resource.

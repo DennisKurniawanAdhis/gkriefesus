@@ -116,14 +116,14 @@ public function index(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $kolekte = Kas::with(['jenisIbadah'])->findOrFail($id);    
+    // public function show(string $id)
+    // {
+    //     //
+    //     $kolekte = Kas::with(['jenisIbadah'])->findOrFail($id);    
         
 
-        return view('kolekte.show', compact('kolekte'));
-    }
+    //     return view('kolekte.show', compact('kolekte'));
+    // }
 
 
     /**

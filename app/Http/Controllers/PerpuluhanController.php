@@ -59,14 +59,14 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $perpuluhan = Kas::with(['anggota'])->findOrFail($id);    
+    // public function show(string $id)
+    // {
+    //     //
+    //     $perpuluhan = Kas::with(['anggota'])->findOrFail($id);    
         
 
-        return view('perpuluhan.show', compact('perpuluhan'));
-    }
+    //     return view('perpuluhan.show', compact('perpuluhan'));
+    // }
 
 
     /**

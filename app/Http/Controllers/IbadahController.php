@@ -79,14 +79,14 @@ return redirect()->route('ibadah')->with('success', 'Baptis added successfully')
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $dataIbadah = Ibadah::with(['jenisIbadah','pendeta'])->findOrFail($id);    
+    // public function show(string $id)
+    // {
+    //     //
+    //     $dataIbadah = Ibadah::with(['jenisIbadah','pendeta'])->findOrFail($id);    
         
 
-        return view('ibadah.show', compact('dataIbadah'));
-    }
+    //     return view('ibadah.show', compact('dataIbadah'));
+    // }
 
     /**
      * Show the form for editing the specified resource.

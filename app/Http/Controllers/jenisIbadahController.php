@@ -76,12 +76,12 @@ class jenisIbadahController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $jenisIbadah = JenisIbadah::findOrFail($id);
+    // public function show(string $id)
+    // {
+    //     $jenisIbadah = JenisIbadah::findOrFail($id);
   
-        return view('jenisIbadah.show', compact('jenisIbadah'));
-    }
+    //     return view('jenisIbadah.show', compact('jenisIbadah'));
+    // }
   
     /**
      * Show the form for editing the specified resource.

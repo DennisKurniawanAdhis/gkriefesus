@@ -98,7 +98,7 @@ class PengeluaranController extends Controller
                 'ibadahID' => $request->ibadahID,
                 'tanggal' => $request->tanggal,
                 'deskripsi' => $request->deskripsi,
-                'jenisPengeluaran' => 'koleke', // Menyimpan namaIbadah sebagai jenisPengeluaran
+                'jenisPengeluaran' => 'kolekte', // Menyimpan namaIbadah sebagai jenisPengeluaran
                 'jumlahUang' => $request->jumlahUang
             ]);
         }
@@ -109,13 +109,13 @@ class PengeluaranController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        // Temukan pengeluaran berdasarkan ID
-        $pengeluaran = Pengeluaran::with(['jenisIbadah'])->findOrFail($id);
+    // public function show(string $id)
+    // {
+    //     // Temukan pengeluaran berdasarkan ID
+    //     $pengeluaran = Pengeluaran::with(['jenisIbadah'])->findOrFail($id);
     
-        return view('pengeluaran.show', compact('pengeluaran'));
-    }
+    //     return view('pengeluaran.show', compact('pengeluaran'));
+    // }
     
 
 

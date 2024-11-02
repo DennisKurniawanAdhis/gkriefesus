@@ -114,16 +114,16 @@ return redirect()->route('pernikahan')->with('success', 'Pernikahan added succes
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $pernikahan = Pernikahan::with(['suami', 'istri', 'pendeta'])->findOrFail($id);    
+    // public function show(string $id)
+    // {
+    //     //
+    //     $pernikahan = Pernikahan::with(['suami', 'istri', 'pendeta'])->findOrFail($id);    
         
-        $alamat = $pernikahan->alamat;
+    //     $alamat = $pernikahan->alamat;
 
-        return view('pernikahan.show', compact('pernikahan','alamat'));
+    //     return view('pernikahan.show', compact('pernikahan','alamat'));
 
-    }
+    // }
 
     /**
      * Show the form for editing the specified resource.

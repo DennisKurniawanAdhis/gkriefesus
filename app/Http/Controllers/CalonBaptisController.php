@@ -119,16 +119,16 @@ return redirect()->route('calonBaptis')->with('success', 'Baptis added successfu
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+    // public function show(string $id)
+    // {
+    //     //
 
-        $baptis = CalonBaptis::with(['alamat','anggota','pendeta'])->findOrFail($id);    
+    //     $baptis = CalonBaptis::with(['alamat','anggota','pendeta'])->findOrFail($id);    
         
-        $alamat = $baptis->alamat;
+    //     $alamat = $baptis->alamat;
 
-        return view('calonBaptis.show', compact('baptis','alamat'));
-    }
+    //     return view('calonBaptis.show', compact('baptis','alamat'));
+    // }
 
     /**
      * Show the form for editing the specified resource.
