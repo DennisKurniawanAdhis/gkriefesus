@@ -38,7 +38,7 @@ public function index(Request $request)
     }
 
     // Eksekusi query dan dapatkan data kolekte
-    $kolekte = $query->get();
+    $kolekte = $query->simplePaginate(5);
 
     // Ambil semua data jenis ibadah untuk dropdown filter
     $allIbadah = JenisIbadah::all();

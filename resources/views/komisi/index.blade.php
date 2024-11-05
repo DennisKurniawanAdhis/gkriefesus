@@ -50,7 +50,6 @@
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
-                <th>No</th>
                 <th>Nama Komisi</th>
                 <th>Action</th>
             </tr>
@@ -59,7 +58,6 @@
             @if($dataKomisi->count() > 0)
                 @foreach($dataKomisi as $rs)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}</td>
                         <td class="align-middle">{{ $rs['komisi']->namaKomisi }}</td>
                         <td class="align-middle">
                             <div class="dropdown">

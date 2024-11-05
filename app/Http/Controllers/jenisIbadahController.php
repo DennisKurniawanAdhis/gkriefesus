@@ -16,7 +16,7 @@ class jenisIbadahController extends Controller
     public function index()
     {
 
-        $jenisIbadah = jenisIbadah::all();
+        $jenisIbadah = jenisIbadah::simplePaginate(5);
       
         return view('jenisIbadah.index', compact('jenisIbadah'));
     }

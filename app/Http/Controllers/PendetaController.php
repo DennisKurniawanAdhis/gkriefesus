@@ -34,9 +34,9 @@ class PendetaController extends Controller
         // Query untuk mencari anggota berdasarkan nama depan atau belakang
         $pendeta = Pendeta::with('alamat')->where('namaDepanPendeta', 'LIKE', "%{$search}%")
                     ->orWhere('namaBelakangPendeta', 'LIKE', "%{$search}%")
-                    ->get();
+                    ->simplePaginate(5);
                     
-
+        $pendeta->appends(['search' => $search]);
     
         return view('pendeta.index', compact('pendeta'));
     }

@@ -15,7 +15,7 @@ class PerpuluhanController extends Controller
     public function index()
     {
         //
-        $perpuluhan = Kas::with('anggota')->where('jenisUang', 'perpuluhan')->get();
+        $perpuluhan = Kas::with('anggota')->where('jenisUang', 'perpuluhan')->simplePaginate(5);
 
         return view('perpuluhan.index', compact('perpuluhan'));
     }

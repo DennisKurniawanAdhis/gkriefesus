@@ -7,7 +7,6 @@ use App\Http\Controllers\KomisiController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\KolekteController;
 use App\Http\Controllers\PendetaController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\KeahlianController;
 use App\Http\Controllers\SumbanganController;
 use App\Http\Controllers\PernikahanController;

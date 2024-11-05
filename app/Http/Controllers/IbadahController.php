@@ -20,24 +20,23 @@ class IbadahController extends Controller
 
     //      return view('ibadah.index', compact('ibadah'));
     // }
-
     public function index(Request $request)
-{
-    $jenisIbadahID = $request->get('ibadahID');
-
-    // Ambil data semua jenis ibadah untuk dropdown
-    $jenisIbadah = JenisIbadah::all();
-
-    // Jika filter dipilih, tampilkan ibadah berdasarkan jenisIbadahID
-    if ($jenisIbadahID) {
-        $ibadah = Ibadah::where('ibadahID', $jenisIbadahID)->get();
-    } else {
-        // Jika tidak ada filter, tampilkan semua ibadah
-        $ibadah = Ibadah::all();
+    {
+        $jenisIbadahID = $request->get('ibadahID');
+    
+        // Ambil data semua jenis ibadah untuk dropdown
+        $jenisIbadah = JenisIbadah::simplePaginate(5);
+    
+        // Jika filter dipilih, tampilkan ibadah berdasarkan jenisIbadahID
+        if ($jenisIbadahID) {
+            $ibadah = Ibadah::where('ibadahID', $jenisIbadahID)->simplePaginate(5);
+        } else {
+            // Jika tidak ada filter, tampilkan semua ibadah
+            $ibadah = Ibadah::simplePaginate(5);
+        }
+    
+        return view('ibadah.index', compact('ibadah', 'jenisIbadah'));
     }
-
-    return view('ibadah.index', compact('ibadah', 'jenisIbadah'));
-}
 
 
     /**

@@ -41,13 +41,21 @@ class AnggotaController extends Controller
         $search = $request->input('search');
     
         // Query untuk mencari anggota berdasarkan nama depan atau belakang
-        $anggota = Anggota::where('namaDepanAnggota', 'LIKE', "%{$search}%")
-                    ->orWhere('namaBelakangAnggota', 'LIKE', "%{$search}%")
-                    ->get();
+        $query = Anggota::query();
+        if ($search) {
+            $query->where('namaDepanAnggota', 'LIKE', "%{$search}%")
+                  ->orWhere('namaBelakangAnggota', 'LIKE', "%{$search}%");
+        }
+        $anggota = $query->simplePaginate(5);
     
-        return view('anggota.index', compact('anggota'));
+        // Tambahkan search query ke URL pagination
+        $anggota->appends(['search' => $search]);
+    
+        return view('anggota.index', compact('anggota', 'search'));
     }
-    
+
+
+ 
   
     /**
      * Show the form for creating a new resource.

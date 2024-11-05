@@ -42,7 +42,7 @@ class PengeluaranController extends Controller
     $jenisIbadah = JenisIbadah::all();
 
     // Eksekusi query dan urutkan tanggal pengeluaran terbaru
-    $pengeluaran = $query->orderBy('tanggal', 'desc')->get();
+    $pengeluaran = $query->orderBy('tanggal', 'desc')->simplePaginate(5);
 
     // Return view dengan data pengeluaran dan jenis ibadah untuk filter
     return view('pengeluaran.index', compact('pengeluaran', 'jenisIbadah'));

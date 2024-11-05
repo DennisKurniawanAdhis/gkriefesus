@@ -1,9 +1,7 @@
-
-
 @extends('layouts.app')
-  
+
 @section('title', 'Home Super Admin')
-  
+
 @section('contents')
     <div class="d-flex align-items-center justify-content-between">
         <h1 class="mb-0">List Admin</h1>
@@ -15,41 +13,6 @@
             {{ Session::get('success') }}
         </div>
     @endif
-    {{-- <table class="table table-hover">
-        <thead class="table-primary">
-            <tr>
-                <th>#</th>
-                <th>Nama</th>
-                <th>Role</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>+
-            @if($admin->count() > 0)
-                @foreach($admin as $rs)
-                    <tr>
-                        <td class="align-middle">{{ $loop->iteration }}</td>
-                        <td class="align-middle">{{ $rs->username }}</td>
-                        <td class="align-middle">{{ $rs->role }}</td>
-                        <td class="align-middle">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('admin.edit', $rs->id)}}" type="button" class="btn btn-warning">Edit</a>
-                                <form action="{{ route('admin.destroy', $rs->id) }}" method="POST" type="button" class="btn btn-danger p-0" onsubmit="return confirm('Delete?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger m-0">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                <tr>
-                    <td class="text-center" colspan="5">Admin Anggota not found</td>
-                </tr>
-            @endif
-        </tbody>
-    </table> --}}
 
     <table class="table table-hover">
         <thead class="table-primary">
@@ -64,7 +27,7 @@
             @if($admin->count() > 0)
                 @foreach($admin as $rs)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}</td>
+                        <td class="align-middle">{{ $loop->iteration + ($admin->currentPage() - 1) * $admin->perPage() }}</td>
                         <td class="align-middle">{{ $rs->username }}</td>
                         <td class="align-middle">{{ $rs->role }}</td>
                         <td class="align-middle">
@@ -95,18 +58,21 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="text-center" colspan="5">Admin Anggota not found</td>
+                    <td class="text-center" colspan="4">Admin Anggota not found</td>
                 </tr>
             @endif
         </tbody>
     </table>
 
+    <!-- Pagination Links -->
+    <div class="d-flex justify-content-center">
+        {{ $admin->links() }}
+    </div>
 
     <!-- Di bagian head -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- Di bagian bawah body -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Di bagian bawah body -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endsection

@@ -27,7 +27,7 @@ class PernikahanController extends Controller
         $pernikahan = Pernikahan::with('alamat')->join('anggota as suami', 'pernikahan.anggotaID_suami', '=', 'suami.anggotaID')
         ->join('anggota as istri', 'pernikahan.anggotaID_istri', '=', 'istri.anggotaID')
         ->select('pernikahan.*', 'suami.namaDepanAnggota as nama_suami', 'istri.namaDepanAnggota as nama_istri')
-        ->get();
+        ->simplePaginate(5);
 
         return view('pernikahan.index', compact('pernikahan'));
 

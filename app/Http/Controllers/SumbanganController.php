@@ -14,7 +14,7 @@ class SumbanganController extends Controller
      */
     public function index()
 {
-    $sumbangan = Kas::where('jenisUang', 'sumbangan')->get();
+    $sumbangan = Kas::where('jenisUang', 'sumbangan')->simplePaginate(5);
     return view('sumbangan.index', compact('sumbangan'));
 }
 

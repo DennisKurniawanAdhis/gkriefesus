@@ -42,9 +42,9 @@ class CalonBaptisController extends Controller
                       ->orWhere('namaBelakangAnggota', 'LIKE', "%{$search}%");
                 });
             })
-            ->get();
+            ->simplePaginate(5);
 
-            
+            $baptis->appends(['search' => $search]);
     
         return view('calonBaptis.index', compact('baptis'));
     }

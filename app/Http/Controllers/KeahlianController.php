@@ -13,7 +13,7 @@ class KeahlianController extends Controller
     public function index()
     {
 
-        $keahlian = Keahlian::all();
+        $keahlian = Keahlian::simplePaginate(5);
         return view('keahlian.index', compact('keahlian'));
     }
   

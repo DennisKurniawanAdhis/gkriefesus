@@ -13,7 +13,7 @@
        */
       public function index()
       {
-          $admin = User::orderBy('created_at', 'DESC')->get();
+          $admin = User::simplepaginate(5);
     
           return view('admin.index', compact('admin'));
       }

@@ -16,7 +16,6 @@
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
-                <th>No</th>
                 <th>Nama Anggota</th>
                 <th>Tanggal Perpuluhan</th>
                 <th>Jumlah Uang</th>
@@ -27,7 +26,6 @@
             @if($perpuluhan->count() > 0)
                 @foreach($perpuluhan as $rs)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}</td>
                         <td class="align-middle">{{ $rs->anggota->namaDepanAnggota }} {{ $rs->anggota->namaBelakangAnggota }}</td>
                         <td class="align-middle">{{ $rs->formatted_tanggal }}</td>
                         <td class="align-middle">Rp. {{ number_format($rs->jumlahUang, 0, '', '.') }}</td>
@@ -114,6 +112,10 @@
             @endif
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-center">
+        {{ $perpuluhan->links() }}
+    </div> 
 
 <!-- Di bagian head -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">

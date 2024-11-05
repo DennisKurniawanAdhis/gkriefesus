@@ -51,7 +51,6 @@
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
-                <th>No</th>
                 <th>Nama Ibadah</th>
                 <th>Action</th>
             </tr>
@@ -60,7 +59,6 @@
             @if($jenisIbadah->count() > 0)
                 @foreach($jenisIbadah as $rs)
                     <tr>
-                        <td class="align-middle">{{ $loop->iteration }}</td>
                         <td class="align-middle">{{ $rs->namaIbadah }}</td>
                         <td class="align-middle">
                             <div class="dropdown">
@@ -154,6 +152,10 @@
             @endif
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-center">
+        {{ $jenisIbadah->links() }}
+    </div> 
 
 <!-- Di bagian head -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
