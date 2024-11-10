@@ -56,6 +56,8 @@
           </div>
       </div>
 
+      
+
       <!-- Kelurahan, Kecamatan, Kota, Provinsi -->
       <div class="row">
           <div class="col-md-3 mb-3">
@@ -71,6 +73,7 @@
               <input type="text" name="provinsi" class="form-control" id="provinsi" placeholder="Provinsi" value="{{ $alamatAnggota->provinsi }}" required>
           </div>
       </div>
+      
 
       <!-- No Telp -->
       <div class="mb-3">

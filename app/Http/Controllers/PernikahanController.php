@@ -54,8 +54,14 @@ class PernikahanController extends Controller
         })
         ->get();
 
+
+
         if ($pria->isEmpty() || $wanita->isEmpty()) {
             return redirect()->back()->with('error', 'Belum ada anggota pria atau wanita yang tersedia.');
+        }
+
+        if ($pendeta->isEmpty() ) {
+            return redirect()->back()->with('error', 'Belum ada pendeta');
         }
 
         return view('pernikahan.create', compact('pendeta','pria', 'wanita' ));

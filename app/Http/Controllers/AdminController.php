@@ -14,8 +14,9 @@
       public function index()
       {
           $admin = User::simplepaginate(5);
-    
-          return view('admin.index', compact('admin'));
+          $superAdminCount = User::where('role', 'super')->count();
+      
+          return view('admin.index', compact('admin', 'superAdminCount'));
       }
     
       /**

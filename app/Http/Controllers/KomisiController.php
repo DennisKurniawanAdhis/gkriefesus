@@ -37,8 +37,24 @@ class KomisiController extends Controller
     {
         $anggota = Anggota::whereNull('komisiID')->get();
 
-        if ($anggota->isEmpty()) {
-            return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+        // if ($anggota->isEmpty()) {
+        //     return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+        // }
+
+        $jumlahAnggotaDenganKomisi = Anggota::whereNotNull('komisiID')->count();
+
+        $jumlahANggota = $anggota->count();
+
+        $hasilPengurangan = $jumlahANggota - $jumlahAnggotaDenganKomisi;
+
+        
+
+        if ($anggota->count() < 4 ) {
+            return redirect()->back()->with('error', 'Jumlah anggota yang tersedia kurang dari 4, tidak dapat menambah data komisi.');
+        }
+
+        if ($hasilPengurangan < 4 ) {
+            return redirect()->back()->with('error', 'Jumlah anggota yang tersedia kurang dari 4, tidak dapat menambah data komisi.');
         }
     
         // Kirim data anggota ke view
@@ -221,6 +237,8 @@ $anggota = Anggota::whereNull('komisiID')
     public function destroy(string $id)
     {
         $komisi = Komisi::findOrFail($id);
+
+
         Anggota::where('komisiID', $id)->update(['jabatan' => null]);
         $komisi->delete();
   

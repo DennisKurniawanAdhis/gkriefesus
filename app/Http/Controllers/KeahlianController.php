@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keahlian;
 use Illuminate\Http\Request;
+use App\Models\AnggotaKeahlian;
  
 class KeahlianController extends Controller
 {
@@ -93,10 +94,24 @@ class KeahlianController extends Controller
      */
     public function destroy(string $id)
     {
+        // Cek apakah keahlian yang ingin dihapus adalah K001
+        if ($id === 'K001') {
+            // Log informasi jika perlu
+            // \Log::info('Attempt to delete K001');
+            return redirect()->route('keahlian')->with('warning', 'Keahlian tidak dapat dihapus.');
+        }
+    
+        // Periksa apakah ada data terkait di tabel anggota_keahlian
+        $relatedRecords = AnggotaKeahlian::where('keahlianID', $id)->count();
+    
+        if ($relatedRecords > 0) {
+            return redirect()->route('keahlian')->with('warning', 'Tidak dapat menghapus keahlian ini karena masih ada data yang menggunakannya.');
+        }
+    
+        // Jika tidak ada data terkait, lanjutkan untuk menghapus keahlian
         $keahlian = Keahlian::findOrFail($id);
-  
         $keahlian->delete();
-  
+    
         return redirect()->route('keahlian')->with('success', 'Keahlian deleted successfully');
     }
 }

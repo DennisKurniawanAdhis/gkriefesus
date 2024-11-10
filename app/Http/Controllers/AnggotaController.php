@@ -2,16 +2,20 @@
   
 namespace App\Http\Controllers;
   
+use App\Models\Kas;
+use App\Models\Komisi;
 use App\Models\Anggota;
 use App\Models\Keahlian;
+use App\Models\Pernikahan;
+use App\Models\CalonBaptis;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
 use App\Models\AlamatAnggota;
 use App\Models\AnggotaIbadah;
 use App\Models\AnggotaKeahlian;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -155,24 +159,7 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
 }
 
   
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     $anggota = Anggota::with('keahlian', 'jenisIbadah','komisi')->findOrFail($id); // pastikan $id adalah id anggota
 
-    //     $alamat = $anggota->alamat;
-    // $jenisIbadah = $anggota->jenisIbadah->pluck('namaIbadah')->implode(', ');
-    // $keahlian = $anggota->keahlian->pluck('namaKeahlian')->implode(', ');
-
-    
-    //     return view('anggota.show', compact('anggota','alamat','keahlian','jenisIbadah'));
-    // }
-  
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $anggota = Anggota::where('anggotaID', $id)->firstOrFail();
@@ -247,7 +234,19 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
     public function destroy(string $id)
     {
         $anggota = Anggota::findOrFail($id);
-  
+
+        if ($anggota->komisiID !== null) {
+            return redirect()->route('anggota')->with('warning', 'Tidak dapat menghapus Anggota ini karena masih terdaftar dalam komisi.');
+        }
+
+        $relatedRecords = CalonBaptis::where('anggotaID', $id)->count();
+        $relatedRecordKas = Kas::where('anggotaID', $id)->count();
+        $relatedRecordPernikahanSuami = Pernikahan::where('anggotaID_suami', $id)->count();
+        $relatedRecordPernikahanIstri = Pernikahan::where('anggotaID_istri', $id)->count();
+    
+        if ($relatedRecords > 0 || $relatedRecordKas > 0 || $relatedRecordPernikahanSuami > 0 || $relatedRecordPernikahanIstri > 0 ) {
+            return redirect()->route('anggota')->with('warning', 'Tidak dapat menghapus Anggota ini karena masih ada data yang menggunakannya.');
+        }
         $anggota->delete();
   
         return redirect()->route('anggota')->with('success', 'Anggota deleted successfully');

@@ -168,7 +168,14 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
     public function destroy(string $id)
     {
         $pendeta = Pendeta::findOrFail($id);
-  
+        
+        $relatedRecords = Pernikahan::where('pendetaID', $id)->count();
+        $relatedRecordBaptis = CalonBaptis::where('pendetaID', $id)->count();
+    
+        if ($relatedRecords > 0 || $relatedRecordBaptis > 0) {
+            return redirect()->route('pendeta')->with('warning', 'Tidak dapat menghapus pendeta ini karena masih ada data yang menggunakannya.');
+        }
+
         $pendeta->delete();
   
         return redirect()->route('pendeta')->with('success', 'Pendeta deleted successfully');

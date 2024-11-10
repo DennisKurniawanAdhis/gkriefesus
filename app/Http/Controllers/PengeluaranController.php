@@ -44,6 +44,9 @@ class PengeluaranController extends Controller
     // Eksekusi query dan urutkan tanggal pengeluaran terbaru
     $pengeluaran = $query->orderBy('tanggal', 'desc')->simplePaginate(5);
 
+    // Menambahkan parameter filter ke pagination links
+    $pengeluaran->appends($request->except('page'));
+
     // Return view dengan data pengeluaran dan jenis ibadah untuk filter
     return view('pengeluaran.index', compact('pengeluaran', 'jenisIbadah'));
 }

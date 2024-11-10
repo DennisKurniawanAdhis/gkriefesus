@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('pernikahanID');
             $table->foreign('pernikahanID') 
                   ->references('pernikahanID')->on('pernikahan') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->string('kelurahan');
             $table->string('kecamatan');
             $table->string('kota');

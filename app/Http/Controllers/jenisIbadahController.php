@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Kas;
+use App\Models\Ibadah;
 use App\Models\JenisIbadah;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use App\Models\AnggotaIbadah;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
  
@@ -113,10 +117,27 @@ class jenisIbadahController extends Controller
      */
     public function destroy(string $id)
     {
+        if ($id === 'B001') {
+            // Log::info('Attempt to delete B001');
+            // Tambahkan logging untuk memastikan kondisi ini terpenuhi
+            // \Log::info('Warning should appear for B001');
+            return redirect()->route('jenisIbadah')->with('warning', 'Jenis Ibadah tidak dapat dihapus.');
+        }
+        // Periksa apakah ada data terkait
+        $relatedRecords = AnggotaIbadah::where('ibadahID', $id)->count();
+        $relatedRecordIbadah = Ibadah::where('ibadahID', $id)->count();
+        $relatedRecordKas = Kas::where('ibadahID', $id)->count();
+        $relatedRecordPengeluaran = Pengeluaran::where('ibadahID', $id)->count();
+    
+        if ($relatedRecords > 0 || $relatedRecordIbadah > 0 || $relatedRecordKas > 0 || $relatedRecordPengeluaran > 0) {
+            return redirect()->route('jenisIbadah')->with('warning', 'Tidak dapat menghapus jenis ibadah ini karena masih ada data yang menggunakannya.');
+        
+        }
+    
+        // Jika tidak ada data terkait, lanjutkan untuk menghapus
         $jenisIbadah = JenisIbadah::findOrFail($id);
-  
         $jenisIbadah->delete();
-  
+    
         return redirect()->route('jenisIbadah')->with('success', 'Jenis Ibadah deleted successfully');
     }
 }

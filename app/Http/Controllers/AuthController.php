@@ -11,26 +11,7 @@ use Illuminate\Validation\ValidationException;
   
 class AuthController extends Controller
 {
-    // public function register()
-    // {
-    //     return view('auth/register');
-    // }
-  
-    // public function registerSave(Request $request)
-    // {
-    //     Validator::make($request->all(), [
-    //         'username' => 'required',
-    //         'password' => 'required|confirmed'
-    //     ])->validate();
-  
-    //     User::create([
-    //         'username' => $request->username,
-    //         'password' => Hash::make($request->password),
-    //         'role' => 'super'
-    //     ]);
-  
-    //     return redirect()->route('login');
-    // }
+
   
     public function login()
     {

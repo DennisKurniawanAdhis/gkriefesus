@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kas;
 use App\Models\Ibadah;
-use App\Models\JenisIbadah;
 use App\Models\Pendeta;
+use App\Models\JenisIbadah;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
 
 class IbadahController extends Controller
@@ -22,11 +24,17 @@ class IbadahController extends Controller
     // }
     public function index(Request $request)
     {
+        // Ambil parameter filter dari request
         $jenisIbadahID = $request->get('ibadahID');
-    
+        
         // Ambil data semua jenis ibadah untuk dropdown
-        $jenisIbadah = JenisIbadah::simplePaginate(5);
+        $jenisIbadah = JenisIbadah::all(); // Mengambil semua jenis ibadah untuk dropdown
     
+        // if ($jenisIbadah->isEmpty()) {
+        //     return redirect()->back()->with('error', 'Belum ada jenis ibadah yang tersedia.');
+        // }
+ 
+
         // Jika filter dipilih, tampilkan ibadah berdasarkan jenisIbadahID
         if ($jenisIbadahID) {
             $ibadah = Ibadah::where('ibadahID', $jenisIbadahID)->simplePaginate(5);
@@ -34,6 +42,9 @@ class IbadahController extends Controller
             // Jika tidak ada filter, tampilkan semua ibadah
             $ibadah = Ibadah::simplePaginate(5);
         }
+    
+        // Menambahkan parameter filter ke pagination, termasuk ibadahID
+        $ibadah->appends(['ibadahID' => $jenisIbadahID]);
     
         return view('ibadah.index', compact('ibadah', 'jenisIbadah'));
     }
@@ -133,10 +144,16 @@ return redirect()->route('ibadah')->with('success', 'Baptis added successfully')
     public function destroy(string $id)
     {
         $dataIbadah = Ibadah::findOrFail($id);
+
+        $relatedRecords = Kas::where('dataIbadahID', $id)->count();
+    
+        if ($relatedRecords > 0  ) {
+            return redirect()->route('ibadah')->with('warning', 'Tidak dapat menghapus ibadah ini karena masih ada data yang menggunakannya.');
+        }
   
         $dataIbadah->delete();
   
-        return redirect()->route('dataIbadah')->with('success', 'Ibadah deleted successfully');
+        return redirect()->route('ibadah')->with('success', 'Ibadah deleted successfully');
         //
     }
 }

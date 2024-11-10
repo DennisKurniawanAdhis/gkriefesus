@@ -55,6 +55,38 @@
           </div>
       </div>
 
+      <script>
+        document.getElementById('submitBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Mencegah form dari pengiriman otomatis
+    
+            const rt = document.getElementById('RT').value;
+            const rw = document.getElementById('RW').value;
+            const kodePos = document.getElementById('kodePos').value;
+    
+            // Validasi RT (harus 4 digit)
+            if (!/^\d{4}$/.test(rt)) {
+                alert('RT harus terdiri dari 4 angka.');
+                return;
+            }
+    
+            // Validasi RW (harus 4 digit)
+            if (!/^\d{4}$/.test(rw)) {
+                alert('RW harus terdiri dari 4 angka.');
+                return;
+            }
+    
+            // Validasi kodePos (harus 7 digit)
+            if (!/^\d{7}$/.test(kodePos)) {
+                alert('Kode Pos harus terdiri dari 7 angka.');
+                return;
+            }
+    
+            // Jika semua validasi lulus, kirim form
+            // Misalnya: document.getElementById('yourFormId').submit();
+            alert('Form valid, siap untuk dikirim!');
+        });
+    </script>
+
       <!-- Kelurahan, Kecamatan, Kota, Provinsi -->
       <div class="row">
           <div class="col-md-3 mb-3">

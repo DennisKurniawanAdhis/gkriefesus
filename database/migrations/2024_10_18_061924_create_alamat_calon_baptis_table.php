@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('baptisID');
             $table->foreign('baptisID') 
                   ->references('baptisID')->on('calonBaptis') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->string('kelurahan');
             $table->string('kecamatan');
             $table->string('kota');

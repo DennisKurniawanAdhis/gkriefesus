@@ -3,7 +3,7 @@
 @section('title', 'Form Anggota')
 
 @section('contents')
-<div class="container">
+
     <form action="{{ route('admin.update', $admin->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -38,5 +38,5 @@
             <button type="submit" class="btn btn-primary mr-3">Save</button>
         </div>
     </form>
-</div>
+
 @endsection

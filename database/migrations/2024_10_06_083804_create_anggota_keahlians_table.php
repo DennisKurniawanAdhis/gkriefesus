@@ -15,11 +15,11 @@ return new class extends Migration
             $table->string('anggotaID');
             $table->foreign('anggotaID') 
                   ->references('anggotaID')->on('anggota') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->string('keahlianID');
             $table->foreign('keahlianID') 
                   ->references('keahlianID')->on('keahlian') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
         });
     }
 

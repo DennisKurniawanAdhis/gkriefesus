@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('anggotaID')->nullable();
             $table->foreign('anggotaID') 
                   ->references('anggotaID')->on('anggota') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->string('ibadahID')->nullable();
             $table->foreign('ibadahID') 
                   ->references('ibadahID')->on('jenisIbadah') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->unsignedBigInteger('dataIbadahID')->nullable();
             $table->foreign('dataIbadahID') 
                   ->references('dataIbadahID')->on('ibadah') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->date('tanggal');
             $table->text('deskripsi')->nullable();
             $table->string('jenisUang')->nullable();;

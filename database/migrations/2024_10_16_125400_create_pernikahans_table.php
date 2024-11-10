@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('anggotaID_suami');
             $table->foreign('anggotaID_suami') 
                   ->references('anggotaID')->on('anggota') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->string('anggotaID_istri');
             $table->foreign('anggotaID_istri') 
                   ->references('anggotaID')->on('anggota') 
-                  ->onDelete('cascade');   
+                  ->onDelete('restrict');   
             $table->string('pendetaID'); // Kolom pendetaID
             $table->foreign('pendetaID') 
                     ->references('pendetaID')->on('pendeta') // Relasi ke pendeta
-                    ->onDelete('cascade'); // Hapus ibadah jika pendeta dihapus
+                    ->onDelete('restrict'); // Hapus ibadah jika pendeta dihapus
             $table->date('tanggalPernikahan'); // Kolom tanggal ibadah
             $table->string('namaOrangKua'); // Kolom tanggal ibadah
             $table->text('noStbld'); // Kolom untuk teks atau deskripsi

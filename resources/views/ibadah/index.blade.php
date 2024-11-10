@@ -13,6 +13,17 @@
             {{ Session::get('success') }}
         </div>
     @endif
+    @if(Session::has('warning'))
+    <div class="alert alert-warning" role="alert">
+        {{ Session::get('warning') }}
+    </div>
+@endif
+
+@if(Session::has('error'))
+    <div class="alert alert-danger" role="alert">
+        {{ Session::get('error') }}
+    </div>
+@endif
 
       <!-- Filter berdasarkan kategori jenis ibadah -->
       <form action="{{ route('ibadah') }}" method="GET" class="mb-3">
@@ -33,44 +44,6 @@
             </div>
         </div>
     </form>
-
-    {{-- <table class="table table-hover">
-        <thead class="table-primary">
-            <tr>
-                <th>Nama Ibadah</th>
-                <th>Tanggal</th>
-                <th>Nama Pendeta</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>+
-            @if($ibadah->count() > 0)
-                @foreach($ibadah as $rs)
-                    <tr>
-                        <td class="align-middle">{{ $rs->jenisIbadah->namaIbadah }}</td>
-                        <td class="align-middle">{{ $rs->formatted_tanggal_ibadah }}</td>
-                        <td class="align-middle">{{ $rs->pendeta->namaDepanPendeta  }} {{ $rs->pendeta->namaBelakangPendeta }}</td>
-                        <td class="align-middle">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('ibadah.show', $rs->dataIbadahID) }}" type="button" class="btn btn-secondary">Detail</a>
-
-                                <a href="{{ route('ibadah.edit', $rs->dataIbadahID) }}" type="button" class="btn btn-warning">Edit</a>
-                                <form action="{{ route('ibadah.destroy', $rs->dataIbadahID) }}" method="POST" type="button" class="btn btn-danger p-0" onsubmit="return confirm('Delete?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger m-0">Delete</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                <tr>
-                    <td class="text-center" colspan="5">Calon Baptis not found</td>
-                </tr>
-            @endif
-        </tbody>
-    </table> --}}
 
     <table class="table table-hover">
         <thead class="table-primary">
@@ -167,7 +140,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="text-center" colspan="5">Calon Baptis not found</td>
+                    <td class="text-center" colspan="5">Ibadah not found</td>
                 </tr>
             @endif
         </tbody>

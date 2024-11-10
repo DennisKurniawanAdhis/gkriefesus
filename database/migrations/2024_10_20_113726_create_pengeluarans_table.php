@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('ibadahID')->nullable();
             $table->foreign('ibadahID') 
                   ->references('ibadahID')->on('jenisIbadah') 
-                  ->onDelete('cascade'); 
+                  ->onDelete('restrict'); 
             $table->text('deskripsi')->nullable();
             $table->date('tanggal');
             $table->string('jenisPengeluaran')->nullable();

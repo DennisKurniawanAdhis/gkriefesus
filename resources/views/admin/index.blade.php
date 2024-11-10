@@ -17,7 +17,7 @@
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
-                <th>#</th>
+                <th>NO</th>
                 <th>Nama</th>
                 <th>Role</th>
                 <th>Action</th>
@@ -37,20 +37,25 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $rs->id }}">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('admin.edit', $rs->id)}}">
+                                        <a class="dropdown-item" href="{{ route('admin.edit', $rs->id) }}">
                                             <i class="bi bi-pencil"></i> Edit
                                         </a>
                                     </li>
-                                    <li>
-                                        <form action="{{ route('admin.destroy', $rs->id) }}" method="POST"
-                                            onsubmit="return confirm('Delete?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
-                                        </form>
-                                    </li>
+                                    @if($rs->role !== 'super' || $superAdminCount > 1)
+                                        <li>
+                                            <form action="{{ route('admin.destroy', $rs->id) }}" method="POST" onsubmit="return confirm('Delete?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <span class="dropdown-item text-muted">Cannot delete the last super admin</span>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </td>

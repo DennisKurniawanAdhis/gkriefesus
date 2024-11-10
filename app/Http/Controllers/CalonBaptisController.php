@@ -44,6 +44,7 @@ class CalonBaptisController extends Controller
             })
             ->simplePaginate(5);
 
+
             $baptis->appends(['search' => $search]);
     
         return view('calonBaptis.index', compact('baptis'));
@@ -61,11 +62,15 @@ class CalonBaptisController extends Controller
         })->get();
         
         $pendeta = Pendeta::all();
-        return view('calonBaptis.create', compact('anggota', 'pendeta'));
-       
         if ($anggota->isEmpty()) {
             return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
         }
+        if ($pendeta->isEmpty() ) {
+            return redirect()->back()->with('error', 'Belum ada pendeta');
+        }
+        return view('calonBaptis.create', compact('anggota', 'pendeta'));
+       
+      
     }
 
     /**
