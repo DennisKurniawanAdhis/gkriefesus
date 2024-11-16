@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Keahlian;
 use Illuminate\Http\Request;
 use App\Models\AnggotaKeahlian;
+use Illuminate\Support\Facades\Auth;
  
 class KeahlianController extends Controller
 {
@@ -13,6 +14,10 @@ class KeahlianController extends Controller
      */
     public function index()
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
         $keahlian = Keahlian::simplePaginate(5);
         return view('keahlian.index', compact('keahlian'));
@@ -23,6 +28,10 @@ class KeahlianController extends Controller
      */
     public function create()
     {
+
+            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         return view('keahlian.create');
     }
   
@@ -31,6 +40,10 @@ class KeahlianController extends Controller
      */
     public function store(Request $request)
     {
+
+            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
         $lastKeahlian = Keahlian::orderBy('keahlianID', 'desc')->first();
         if ($lastKeahlian) {
@@ -72,6 +85,10 @@ class KeahlianController extends Controller
      */
     public function edit(string $id)
     {
+
+            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $keahlian = Keahlian::findOrFail($id);
   
         return view('keahlian.edit', compact('keahlian'));
@@ -82,6 +99,10 @@ class KeahlianController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $keahlian = Keahlian::findOrFail($id);
   
         $keahlian->update($request->all());
@@ -94,6 +115,10 @@ class KeahlianController extends Controller
      */
     public function destroy(string $id)
     {
+
+            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         // Cek apakah keahlian yang ingin dihapus adalah K001
         if ($id === 'K001') {
             // Log informasi jika perlu

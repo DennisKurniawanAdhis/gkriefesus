@@ -6,6 +6,7 @@ use App\Models\Kas;
 use App\Models\Anggota;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PerpuluhanController extends Controller
 {
@@ -14,6 +15,9 @@ class PerpuluhanController extends Controller
      */
     public function index()
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         //
         $perpuluhan = Kas::with('anggota')->where('jenisUang', 'perpuluhan')->simplePaginate(5);
 
@@ -25,6 +29,9 @@ class PerpuluhanController extends Controller
      */
     public function create()
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // 
         $anggota = Anggota::all();
         if ($anggota->isEmpty()) {
@@ -40,7 +47,9 @@ class PerpuluhanController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $perpuluhan = new Kas();
 $perpuluhan->anggotaID = $request->anggotaID;
 $perpuluhan->jumlahUang = $request->jumlahUang;
@@ -74,6 +83,10 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
      */
     public function edit(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $perpuluhan = Kas::where('kasID', $id)->firstOrFail();
         $anggotaTerpilih = Anggota::where('anggotaID', $perpuluhan->anggotaID)->first();
         $anggota = Anggota::all();
@@ -90,6 +103,10 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Validasi data yang masuk
         $request->validate([
             'anggotaID' => 'required',
@@ -113,6 +130,9 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
      */
     public function destroy(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $perpuluhan = Kas::findOrFail($id);
   
         $perpuluhan->delete();

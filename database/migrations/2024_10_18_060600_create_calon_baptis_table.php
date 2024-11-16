@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('anggotaID');
             $table->foreign('anggotaID') 
                   ->references('anggotaID')->on('anggota') 
-                  ->onDelete('restrict'); 
+                  ->onDelete('cascade'); 
             $table->string('pendetaID'); 
             $table->foreign('pendetaID') 
                     ->references('pendetaID')->on('pendeta')

@@ -8,6 +8,7 @@ use App\Models\CalonBaptis;
 use Illuminate\Http\Request;
 use App\Models\AlamatCalonBaptis;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CalonBaptisController extends Controller
 {
@@ -31,6 +32,10 @@ class CalonBaptisController extends Controller
 
     public function index(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         // Ambil query string dari request untuk pencarian
         $search = $request->input('search');
     
@@ -56,6 +61,10 @@ class CalonBaptisController extends Controller
      */
     public function create()
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $anggota = Anggota::whereNotIn('anggotaID', function($query) {
             $query->select('anggotaID')->from('calonBaptis');
@@ -63,7 +72,7 @@ class CalonBaptisController extends Controller
         
         $pendeta = Pendeta::all();
         if ($anggota->isEmpty()) {
-            return redirect()->back()->with('error', 'Belum ada data anggota yang tersedia.');
+            return redirect()->back()->with('error', 'Belum ada data calon baptis yang tersedia.');
         }
         if ($pendeta->isEmpty() ) {
             return redirect()->back()->with('error', 'Belum ada pendeta');
@@ -78,7 +87,9 @@ class CalonBaptisController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
         $lastBaptis = CalonBaptis::orderBy('baptisID', 'desc')->first();
         if ($lastBaptis) {
@@ -116,7 +127,7 @@ $alamat->RW = $request->RW;
 $alamat->kodePos = $request->kodePos;
 $alamat->save();  // Simpan data alamat
 
-return redirect()->route('calonBaptis')->with('success', 'Baptis added successfully');
+return redirect()->route('calonBaptis')->with('success', 'calon baptis added successfully');
 
 
     }
@@ -140,6 +151,10 @@ return redirect()->route('calonBaptis')->with('success', 'Baptis added successfu
      */
     public function edit(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $baptis = CalonBaptis::where('baptisID', $id)->firstOrFail();
     
         $pendetaTerpilih = Pendeta::where('pendetaID', $baptis->pendetaID)->first();
@@ -169,6 +184,10 @@ return redirect()->route('calonBaptis')->with('success', 'Baptis added successfu
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $baptis = calonBaptis::findOrFail($id);
         
@@ -180,7 +199,7 @@ return redirect()->route('calonBaptis')->with('success', 'Baptis added successfu
             ]));
         }
 
-        return redirect()->route('calonBaptis')->with('success', 'Anggota updated successfully');
+        return redirect()->route('calonBaptis')->with('success', 'Calon baptis updated successfully');
 
     }
 
@@ -189,12 +208,16 @@ return redirect()->route('calonBaptis')->with('success', 'Baptis added successfu
      */
     public function destroy(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $baptis = CalonBaptis::findOrFail($id);
   
         $baptis->delete();
   
-        return redirect()->route('calonBaptis')->with('success', 'Baptis deleted successfully');
+        return redirect()->route('calonBaptis')->with('success', 'calon baptis deleted successfully');
 
     }
 }

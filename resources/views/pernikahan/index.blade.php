@@ -148,7 +148,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td class="text-center" colspan="5">Anggota not found</td>
+                    <td class="text-center" colspan="5">Pernikahan not found</td>
                 </tr>
             @endif
         </tbody>

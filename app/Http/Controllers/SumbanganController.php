@@ -6,6 +6,7 @@ use App\Models\Kas;
 use App\Models\Anggota;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SumbanganController extends Controller
 {
@@ -14,6 +15,10 @@ class SumbanganController extends Controller
      */
     public function index()
 {
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        return redirect()->back();
+    }
+    
     $sumbangan = Kas::where('jenisUang', 'sumbangan')->simplePaginate(5);
     return view('sumbangan.index', compact('sumbangan'));
 }
@@ -24,7 +29,9 @@ class SumbanganController extends Controller
      */
     public function create()
     {
-        // 
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
        
         return view('sumbangan.create');
 
@@ -35,6 +42,9 @@ class SumbanganController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         
         $sumbangan = new Kas();
 $sumbangan->namaPenyumbang = $request->namaPenyumbang;
@@ -47,7 +57,7 @@ $sumbangan->save();  // Simpan data anggota
 // Buat alamat baru dan simpan
 
 
-return redirect()->route('sumbangan')->with('success', 'Kolekte added successfully');
+return redirect()->route('sumbangan')->with('success', 'Sumbangan added successfully');
 
 
     }
@@ -57,6 +67,9 @@ return redirect()->route('sumbangan')->with('success', 'Kolekte added successful
      */
     public function show(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         //
         $sumbangan = Kas::findOrFail($id);
 
@@ -71,6 +84,9 @@ return redirect()->route('sumbangan')->with('success', 'Kolekte added successful
      */
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $sumbangan = Kas::where('kasID', $id)->firstOrFail();
        
         $jumlahUangFormatted = intval($sumbangan->jumlahUang);
@@ -84,6 +100,9 @@ return redirect()->route('sumbangan')->with('success', 'Kolekte added successful
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Validasi data yang masuk
         $request->validate([
     
@@ -108,6 +127,9 @@ return redirect()->route('sumbangan')->with('success', 'Kolekte added successful
      */
     public function destroy(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $sumbangan = Kas::findOrFail($id);
   
         $sumbangan->delete();

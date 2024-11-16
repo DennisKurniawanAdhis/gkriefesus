@@ -16,6 +16,7 @@ use App\Models\AnggotaKeahlian;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -41,6 +42,9 @@ class AnggotaController extends Controller
     }
     public function index(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         // Cek apakah ada input pencarian dari user
         $search = $request->input('search');
     
@@ -67,7 +71,9 @@ class AnggotaController extends Controller
     public function create()
     {
         
-        
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $jenisKelamin = Anggota::jenisKelamin;
         $statusKawin = Anggota::statusKawin;
         $jenisIbadah = JenisIbadah::all();
@@ -81,6 +87,9 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
 {
+    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        return redirect()->back();
+    }
  
     $lastAnggota = Anggota::orderBy('anggotaID', 'desc')->first();
     if ($lastAnggota) {
@@ -162,6 +171,9 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
 
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $anggota = Anggota::where('anggotaID', $id)->firstOrFail();
         $jenisKelamin = Anggota::jenisKelamin;
         $statusKawin = Anggota::statusKawin;
@@ -212,6 +224,9 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $anggota = Anggota::findOrFail($id);
         
         $anggota->update($request->all());
@@ -233,6 +248,9 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
      */
     public function destroy(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $anggota = Anggota::findOrFail($id);
 
         if ($anggota->komisiID !== null) {

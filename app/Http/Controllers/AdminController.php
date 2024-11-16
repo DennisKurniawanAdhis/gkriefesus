@@ -1,7 +1,8 @@
 <?php
-  
-  namespace App\Http\Controllers;
 
+
+  namespace App\Http\Controllers;
+  use Illuminate\Support\Facades\Auth;
   use Illuminate\Http\Request;
   use Illuminate\Foundation\Auth\User;
   use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,9 @@
        */
       public function index()
       {
+        if (!Auth::check() || Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
           $admin = User::simplepaginate(5);
           $superAdminCount = User::where('role', 'super')->count();
       
@@ -24,11 +28,12 @@
        */
       public function create()
       {
-
+        if (!Auth::check() || Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
         $role = [
             'keanggotaan' => 'keanggotaan',
             'keuangan' => 'keuangan',
-            'super' => 'super',
         ];
         return view('admin.create', compact('role'));
       }
@@ -38,7 +43,9 @@
        */
       public function store(Request $request)
       {
-
+        if (!Auth::check() || Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
         $validatedData = $request->validate([
             'username' => 'required|string|max:255',
             'password' =>  [
@@ -71,6 +78,9 @@
        */
       public function edit(string $id)
       {
+        if (!Auth::check() || Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
           // Temukan user berdasarkan ID
           $admin = User::where('id', $id)->firstOrFail();
           $role = [
@@ -89,7 +99,18 @@
        */
       public function update(Request $request, string $id)
       {
-          // Validasi input
+        if (!Auth::check() || Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
+        $admin = User::findOrFail($id);
+
+        if (Auth::id() == $id && Auth::user()->role === 'super') {
+            
+        if ($request->has('role') && $request->role !== $admin->role) {
+            return redirect()->route('admin')->with('error', 'Tidak dapat mengubah data admin super.');
+        }
+    }
+
           $validatedData = $request->validate([
               'username' => 'required|string|max:255',
               'password' => [
@@ -106,6 +127,8 @@
               'role.required' => 'Role harus dipilih.', // Add role error message
           ]);
       
+        
+
           // Temukan user berdasarkan ID
           $admin = User::findOrFail($id);
       
@@ -133,6 +156,9 @@
        */
      public function destroy(string $id)
 {
+    if (!Auth::check() || Auth::user()->role !== 'super' ) {
+        return redirect()->back();
+    }
     $admin = User::findOrFail($id);
 
     // Cek apakah admin yang ingin dihapus memiliki role 'super'

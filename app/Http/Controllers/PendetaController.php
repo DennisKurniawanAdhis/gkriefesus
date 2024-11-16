@@ -10,6 +10,7 @@ use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
 use App\Models\AlamatPendeta;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PendetaController extends Controller
 {
@@ -28,6 +29,10 @@ class PendetaController extends Controller
     // }
     public function index(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         // Cek apakah ada input pencarian dari user
         $search = $request->input('search');
     
@@ -45,7 +50,9 @@ class PendetaController extends Controller
      */
     public function create()
     {
-        
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         
         $jenisKelamin = Pendeta::jenisKelamin;
         $statusKawin = Pendeta::statusKawin;
@@ -60,7 +67,9 @@ class PendetaController extends Controller
      */
     public function store(Request $request)
 {
-
+    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        return redirect()->back();
+    }
     $lastPendeta = \App\Models\Pendeta::orderBy('pendetaID', 'desc')->first();
 
     // Jika ada pendetaID terakhir, ekstrak bagian numerik dan tambahkan 1
@@ -134,6 +143,9 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
      */
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $pendeta = Pendeta::where('pendetaID', $id)->firstOrFail();
         $jenisKelamin = Pendeta::jenisKelamin;
         $statusKawin = Pendeta::statusKawin;
@@ -148,6 +160,10 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $pendeta = Pendeta::findOrFail($id);
         
         $pendeta->update($request->all());
@@ -167,6 +183,10 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
      */
     public function destroy(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $pendeta = Pendeta::findOrFail($id);
         
         $relatedRecords = Pernikahan::where('pendetaID', $id)->count();
@@ -182,17 +202,7 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
     }
 
   
-//     public function dashboard(Request $request, string $pendetaID)
-// {
-//     // Ambil data pendeta berdasarkan ID
-//     $pendeta = Pendeta::findOrFail($pendetaID);
-    
-//     // Ambil daftar pelayanan terkait pendeta, asumsikan ada relasi
-//     $ibadah = Ibadah::where('pendetaID', $pendetaID)->get();
 
-//     // Kembalikan view dengan data pendeta dan daftar pelayanan
-//     return view('pendeta.dashboard', compact('pendeta', 'ibadah')); 
-// }
 
     
 }

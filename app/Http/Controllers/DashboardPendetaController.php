@@ -8,11 +8,15 @@ use App\Models\Pernikahan;
 use App\Models\CalonBaptis;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardPendetaController extends Controller
 {
     public function index(Request $request)
-    {
+    {        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        return redirect()->back();
+    }
+    
         // Ambil semua pendeta untuk dropdown
         $pendeta = Pendeta::all();
 

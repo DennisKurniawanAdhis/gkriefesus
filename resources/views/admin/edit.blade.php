@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Form Anggota')
+@section('title', 'Form Edit Admin')
 
 @section('contents')
 

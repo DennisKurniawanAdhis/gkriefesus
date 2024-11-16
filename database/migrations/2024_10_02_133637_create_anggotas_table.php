@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string(column: 'NIK');
             $table->string(column: 'pekerjaan');
             $table->string('jabatan')->nullable();
-                
 
         });
 

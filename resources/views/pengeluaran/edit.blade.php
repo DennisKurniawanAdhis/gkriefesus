@@ -27,7 +27,7 @@
 
         <div class="mb-3">
             <label for="tanggal" class="form-label">Tanggal Pengeluaran</label>
-            <input type="date" name="tanggal" class="form-control" id="tanggal" placeholder="DD/MM/YYYY" value="{{ $pengeluaran->tanggal }}" required>
+            <input type="date" name="tanggal" class="form-control" id="tanggal" placeholder="DD/MM/YYYY" value="{{ $tanggalFormatted }}" required>
         </div>
         
         <div class="mb-3">

@@ -8,6 +8,7 @@ use App\Models\Pendeta;
 use App\Models\JenisIbadah;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IbadahController extends Controller
 {
@@ -24,6 +25,11 @@ class IbadahController extends Controller
     // }
     public function index(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
+        
         // Ambil parameter filter dari request
         $jenisIbadahID = $request->get('ibadahID');
         
@@ -55,7 +61,9 @@ class IbadahController extends Controller
      */
     public function create()
     {
-        //
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
     
         $pendeta = Pendeta::all();
         $ibadah = JenisIbadah::all();
@@ -72,6 +80,10 @@ class IbadahController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
 $ibadah = new Ibadah();
 $ibadah->ibadahID = $request->ibadahID;
@@ -83,7 +95,7 @@ $ibadah->save();  // Simpan data anggota
 // Buat alamat baru dan simpan
 
 
-return redirect()->route('ibadah')->with('success', 'Baptis added successfully');
+return redirect()->route('ibadah')->with('success', 'Ibadah added successfully');
     }
 
     /**
@@ -103,6 +115,11 @@ return redirect()->route('ibadah')->with('success', 'Baptis added successfully')
      */
     public function edit(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
+
         $dataIbadah = Ibadah::where('dataIbadahID', $id)->firstOrFail();
 
         $jenisIbadahTerpilih = JenisIbadah::where('ibadahID', $dataIbadah->ibadahID)->first();
@@ -129,6 +146,10 @@ return redirect()->route('ibadah')->with('success', 'Baptis added successfully')
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $dataIbadahID = Ibadah::findOrFail($id);
         
@@ -143,6 +164,11 @@ return redirect()->route('ibadah')->with('success', 'Baptis added successfully')
      */
     public function destroy(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
+        
         $dataIbadah = Ibadah::findOrFail($id);
 
         $relatedRecords = Kas::where('dataIbadahID', $id)->count();

@@ -8,6 +8,7 @@ use App\Models\Anggota;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class KolekteController extends Controller
 {
@@ -26,6 +27,10 @@ class KolekteController extends Controller
 
 public function index(Request $request)
 {
+
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        return redirect()->back();
+    }
     // Query dasar untuk data kolekte
     $query = Kas::with('jenisIbadah')->where('jenisUang', 'kolekte');
 
@@ -52,6 +57,9 @@ public function index(Request $request)
      */
     public function create()
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // 
         $ibadah = Ibadah::with(['jenisIbadah'])
     ->whereNotExists(function ($query) {
@@ -73,6 +81,9 @@ public function index(Request $request)
 
     public function store(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Ambil data ibadah berdasarkan dataIbadahID yang dipilih
         $ibadah = Ibadah::with('jenisIbadah')->find($request->dataIbadahID);
         
@@ -131,6 +142,9 @@ public function index(Request $request)
      */
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Ambil data kolekte yang akan diedit beserta relasinya
         $kolekte = Kas::with(['ibadah.jenisIbadah'])->where('kasID', $id)->firstOrFail();
     
@@ -160,6 +174,9 @@ public function index(Request $request)
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Validasi data yang masuk
         $kolekte = Kas::findOrFail($id);
     
@@ -177,6 +194,9 @@ public function index(Request $request)
      */
     public function destroy(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $kolekte = Kas::findOrFail($id);
   
         $kolekte->delete();

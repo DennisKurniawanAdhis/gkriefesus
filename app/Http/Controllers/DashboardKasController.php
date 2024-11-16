@@ -1,17 +1,23 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Kas;
-use App\Models\Pengeluaran;
-use App\Models\JenisIbadah;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Kas;
+use App\Models\JenisIbadah;
+use App\Models\Pengeluaran;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardKasController extends Controller
 {
     public function index(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
+        
         // Set tanggal default jika tidak ada filter
         $tanggalAwal = $request->input('tanggalAwal') ? 
             Carbon::parse($request->input('tanggalAwal'))->startOfDay() : null;

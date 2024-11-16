@@ -7,6 +7,7 @@ use App\Models\Anggota;
 use App\Models\JenisIbadah;
 use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PengeluaranController extends Controller
 {
@@ -24,6 +25,11 @@ class PengeluaranController extends Controller
 
     public function index(Request $request)
 {
+    
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        return redirect()->back();
+    }
+
     // Query dasar untuk data pengeluaran
     $query = Pengeluaran::with('jenisIbadah');
 
@@ -58,6 +64,9 @@ class PengeluaranController extends Controller
      */
     public function create()
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // 
         $ibadah = JenisIbadah::all();
 
@@ -70,9 +79,12 @@ class PengeluaranController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Validasi input
         $request->validate([
-            'tanggal' => 'required|date',
+           
             'jumlahUang' => 'required|numeric',
             'deskripsi' => 'nullable|string|max:255'
         ]);
@@ -105,6 +117,7 @@ class PengeluaranController extends Controller
                 'jumlahUang' => $request->jumlahUang
             ]);
         }
+
     
         return redirect()->route('pengeluaran')->with('success', 'Pengeluaran added successfully');
     }
@@ -127,6 +140,9 @@ class PengeluaranController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         // Temukan pengeluaran berdasarkan ID
         $pengeluaran = Pengeluaran::findOrFail($id);
         // Ambil semua jenis ibadah
@@ -134,7 +150,8 @@ class PengeluaranController extends Controller
 
         $jumlahUangFormatted = intval($pengeluaran->jumlahUang);
     
-        return view('pengeluaran.edit', compact('pengeluaran', 'ibadah','jumlahUangFormatted'));
+        $tanggalFormatted = $pengeluaran->tanggal ? $pengeluaran->tanggal->format('Y-m-d') : null;
+        return view('pengeluaran.edit', compact('pengeluaran', 'ibadah','jumlahUangFormatted','tanggalFormatted'));
     }
     
 
@@ -143,6 +160,10 @@ class PengeluaranController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
+
         // Validasi data yang masuk
         // $request->validate([
         //     'tanggal' => 'required|date',
@@ -192,6 +213,9 @@ class PengeluaranController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+            return redirect()->back();
+        }
         $pengeluaran = Pengeluaran::findOrFail($id);
   
         $pengeluaran->delete();

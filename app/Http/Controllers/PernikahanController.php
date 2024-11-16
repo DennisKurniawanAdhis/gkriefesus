@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\AlamatAnggota;
 use App\Models\AlamatPernikahan;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PernikahanController extends Controller
 {
@@ -22,7 +23,9 @@ class PernikahanController extends Controller
 
     public function index()
     {
-        //
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
         $pernikahan = Pernikahan::with('alamat')->join('anggota as suami', 'pernikahan.anggotaID_suami', '=', 'suami.anggotaID')
         ->join('anggota as istri', 'pernikahan.anggotaID_istri', '=', 'istri.anggotaID')
@@ -38,6 +41,10 @@ class PernikahanController extends Controller
      */
     public function create()
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $pendeta = Pendeta::all();
 
@@ -75,6 +82,10 @@ class PernikahanController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $lastPernikahan = Pernikahan::orderBy('pernikahanID', 'desc')->first();
         if ($lastPernikahan) {
             // Ekstrak bagian numerik dari ibadahID
@@ -136,7 +147,9 @@ return redirect()->route('pernikahan')->with('success', 'Pernikahan added succes
      */
     public function edit(string $id)
     {
-        //
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
           // Ambil data pernikahan berdasarkan pernikahanID
     // $pernikahan = Pernikahan::where('pernikahanID', $id)->firstOrFail();
@@ -208,6 +221,10 @@ $pernikahan = Pernikahan::with(['suami', 'istri'])->find($id);
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         //
         $pernikahan = Pernikahan::findOrFail($id);
         
@@ -229,6 +246,10 @@ $pernikahan = Pernikahan::with(['suami', 'istri'])->find($id);
      */
     public function destroy(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $pernikahan = Pernikahan::findOrFail($id);
   
         $pernikahan->delete();

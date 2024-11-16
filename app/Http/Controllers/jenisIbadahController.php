@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\AnggotaIbadah;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
  
 class jenisIbadahController extends Controller
 {
@@ -18,7 +19,10 @@ class jenisIbadahController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {        
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        return redirect()->back();
+    }
 
         $jenisIbadah = jenisIbadah::simplePaginate(5);
       
@@ -31,6 +35,10 @@ class jenisIbadahController extends Controller
     public function create()
 
     {   
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $hari = JenisIbadah::hari;
         return view('jenisIbadah.create', compact('hari'));
     }
@@ -40,6 +48,10 @@ class jenisIbadahController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
 
         $request->validate([
             'namaIbadah' => 'required|string|max:255',
@@ -92,6 +104,10 @@ class jenisIbadahController extends Controller
      */
     public function edit(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $hari = JenisIbadah::hari;
         
         $jenisIbadah = JenisIbadah::findOrFail($id); // Pastikan Anda mengambil data yang tepat
@@ -105,6 +121,10 @@ class jenisIbadahController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         $jenisIbadah = JenisIbadah::findOrFail($id);
   
         $jenisIbadah->update($request->all());
@@ -117,6 +137,10 @@ class jenisIbadahController extends Controller
      */
     public function destroy(string $id)
     {
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+            return redirect()->back();
+        }
         if ($id === 'B001') {
             // Log::info('Attempt to delete B001');
             // Tambahkan logging untuk memastikan kondisi ini terpenuhi
