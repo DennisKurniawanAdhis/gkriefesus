@@ -12,17 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class IbadahController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     //
-    //      //
-    //      $ibadah = Ibadah::with(['jenisIbadah', 'pendeta'])->get();
-
-    //      return view('ibadah.index', compact('ibadah'));
-    // }
+   
     public function index(Request $request)
     {
 

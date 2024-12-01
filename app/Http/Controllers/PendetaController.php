@@ -191,8 +191,9 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
         
         $relatedRecords = Pernikahan::where('pendetaID', $id)->count();
         $relatedRecordBaptis = CalonBaptis::where('pendetaID', $id)->count();
-    
-        if ($relatedRecords > 0 || $relatedRecordBaptis > 0) {
+        $relatedRecordIbadah = Ibadah::where('pendetaID', $id)->count();
+
+        if ($relatedRecords > 0 || $relatedRecordBaptis > 0 || $relatedRecordIbadah > 0) {
             return redirect()->route('pendeta')->with('warning', 'Tidak dapat menghapus pendeta ini karena masih ada data yang menggunakannya.');
         }
 

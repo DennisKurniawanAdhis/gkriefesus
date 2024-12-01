@@ -6,6 +6,7 @@ use App\Models\Kas;
 use App\Models\Anggota;
 use App\Models\JenisIbadah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PerpuluhanController extends Controller
@@ -13,16 +14,28 @@ class PerpuluhanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
-            return redirect()->back();
-        }
-        //
-        $perpuluhan = Kas::with('anggota')->where('jenisUang', 'perpuluhan')->simplePaginate(5);
-
-        return view('perpuluhan.index', compact('perpuluhan'));
+    public function index(Request $request)
+{
+    if (!Auth::check() || Auth::user()->role !== 'keuangan') {
+        return redirect()->back();
     }
+    
+    $query = Kas::with('anggota')->where('jenisUang', 'perpuluhan');
+    
+    // Filter berdasarkan anggotaID
+    if ($request->has('anggotaID') && $request->anggotaID != '') {
+        $query->where('anggotaID', $request->anggotaID);
+    }
+    
+    $perpuluhan = $query->simplePaginate(5);
+    
+    // Ambil daftar anggota untuk dropdown
+    $daftarAnggota = Anggota::select('anggotaID', DB::raw("CONCAT(namaDepanAnggota, ' ', COALESCE(namaBelakangAnggota, '')) AS nama_lengkap"))
+        ->orderBy('nama_lengkap')
+        ->pluck('nama_lengkap', 'anggotaID');
+
+    return view('perpuluhan.index', compact('perpuluhan', 'daftarAnggota'));
+}
 
     /**
      * Show the form for creating a new resource.

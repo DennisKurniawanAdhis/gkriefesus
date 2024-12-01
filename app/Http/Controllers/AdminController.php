@@ -83,11 +83,19 @@
         }
           // Temukan user berdasarkan ID
           $admin = User::where('id', $id)->firstOrFail();
-          $role = [
+    
+    // Set role berdasarkan kondisi
+    $role = [];
+    if ($admin->role === 'super') {
+        $role = [
+            'super' => 'super'
+        ];
+    } else {
+        $role = [
             'keanggotaan' => 'keanggotaan',
             'keuangan' => 'keuangan',
-            'super' => 'super',
         ];
+    }
 
     
           // Tampilkan form edit
@@ -179,4 +187,3 @@
 }
 
   }
-  

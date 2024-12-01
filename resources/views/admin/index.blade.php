@@ -52,7 +52,7 @@
                                             <i class="bi bi-pencil"></i> Edit
                                         </a>
                                     </li>
-                                    @if($rs->role !== 'super' || $superAdminCount > 1)
+                                    @if($rs->role !== 'super' )
                                         <li>
                                             <form action="{{ route('admin.destroy', $rs->id) }}" method="POST" onsubmit="return confirm('Delete?')">
                                                 @csrf

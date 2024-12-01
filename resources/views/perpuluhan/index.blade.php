@@ -25,6 +25,25 @@
     </div>
 @endif
 
+<form method="GET" action="{{ route('perpuluhan') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="anggotaID" class="form-label">Filter Nama Anggota</label>
+            <select name="anggotaID" id="anggotaID" class="form-control">
+                <option value="">-- Pilih Anggota --</option>
+                @foreach($daftarAnggota as $id => $nama)
+                    <option value="{{ $id }}" {{ request('anggotaID') == $id ? 'selected' : '' }}>
+                        {{ $nama }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
@@ -126,7 +145,7 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $perpuluhan->links() }}
+        {{$perpuluhan->appends(request()->query())->links() }}
     </div> 
 
 <!-- Di bagian head -->
