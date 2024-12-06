@@ -9,12 +9,15 @@
     
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="username" placeholder="Username" value="{{ old('username') }}" required>
+            @error('username')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
         </div>
     
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Password" required>
+            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Password" value="{{ old('password') }}" required>
             @error('password')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror

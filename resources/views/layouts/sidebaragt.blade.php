@@ -11,18 +11,6 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
     
-    <!-- Nav Item - Dashboard -->
-    {{-- <li class="nav-item">
-      <a class="nav-link" href="{{ route('dashboard') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
-    </li> --}}
-    
-    {{-- <li class="nav-item">
-      <a class="nav-link" href="{{ route('products') }}">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Product</span></a>
-    </li> --}}
 
     <li class="nav-item {{ Request::is('anggota') ? 'active' : '' }}">
       <a class="nav-link" href="{{ route('anggota') }}">
@@ -48,7 +36,7 @@
         <span>Pendeta</span></a>
 
 
-    {{-- pendeta end --}}
+    
 
     <li class="nav-item {{ Request::is('pernikahan') ? 'active' : '' }}">
       <a class="nav-link" href="{{ route('pernikahan') }}">
@@ -80,7 +68,14 @@
         <span>Dashboard Pendeta</span></a>
     </li>
 
-
+    @if ( auth()->user()->role == 'super' )
+    <li class="nav-item">
+      <a class="nav-link" href="{{ route('super') }}">
+        <i class="fa-solid fa-user"></i>
+        <span>Halaman Super Admin</span></a>
+    </li>
+    @endif
+   
 
     <li class="nav-item">
       <a class="nav-link" href="#" onclick="confirmLogout(event)">

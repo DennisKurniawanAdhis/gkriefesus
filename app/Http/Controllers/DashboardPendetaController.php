@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Auth;
 class DashboardPendetaController extends Controller
 {
     public function index(Request $request)
-    {        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
-        return redirect()->back();
-    }
+    {        
+        
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
+
     
         // Ambil semua pendeta untuk dropdown
         $pendeta = Pendeta::all();

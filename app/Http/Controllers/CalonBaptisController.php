@@ -21,21 +21,14 @@ class CalonBaptisController extends Controller
          return $this->hasOne(AlamatCalonBaptis::class);
      }
 
-    // public function index()
-    // {
-    //     //
-    //     $baptis = CalonBaptis::with('anggota')->get();
-
-    //     return view('calonBaptis.index', compact('baptis'));
-
-    // }
 
     public function index(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         // Ambil query string dari request untuk pencarian
         $search = $request->input('search');
     
@@ -62,9 +55,10 @@ class CalonBaptisController extends Controller
     public function create()
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         //
         $anggota = Anggota::whereNotIn('anggotaID', function($query) {
             $query->select('anggotaID')->from('calonBaptis');
@@ -87,9 +81,17 @@ class CalonBaptisController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
+
+        $request->validate([
+            //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+               'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+            ]);
 
         $lastBaptis = CalonBaptis::orderBy('baptisID', 'desc')->first();
         if ($lastBaptis) {
@@ -132,29 +134,14 @@ return redirect()->route('calonBaptis')->with('success', 'calon baptis added suc
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-
-    //     $baptis = CalonBaptis::with(['alamat','anggota','pendeta'])->findOrFail($id);    
-        
-    //     $alamat = $baptis->alamat;
-
-    //     return view('calonBaptis.show', compact('baptis','alamat'));
-    // }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
     public function edit(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $baptis = CalonBaptis::where('baptisID', $id)->firstOrFail();
     
         $pendetaTerpilih = Pendeta::where('pendetaID', $baptis->pendetaID)->first();
@@ -185,10 +172,19 @@ return redirect()->route('calonBaptis')->with('success', 'calon baptis added suc
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
-        //
+
+        
+        $request->validate([
+            //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+               'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+            ]);
+
+
         $baptis = calonBaptis::findOrFail($id);
         
         $baptis->update($request->all());
@@ -209,9 +205,10 @@ return redirect()->route('calonBaptis')->with('success', 'calon baptis added suc
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         //
         $baptis = CalonBaptis::findOrFail($id);
   

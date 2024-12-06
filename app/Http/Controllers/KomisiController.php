@@ -17,9 +17,10 @@ class KomisiController extends Controller
     public function index()
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $komisi = Komisi::with('anggota')->get();
         
         $dataKomisi = $komisi->map(function($k) {
@@ -41,9 +42,10 @@ class KomisiController extends Controller
     public function create()
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
 
         $anggota = Anggota::whereNull('komisiID')->get();
 
@@ -77,9 +79,10 @@ class KomisiController extends Controller
     public function store(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         // Validasi input
         $request->validate([
             // 'komisiID' => 'required|unique:komisi,komisiID',
@@ -165,9 +168,10 @@ class KomisiController extends Controller
     public function edit(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $komisi = Komisi::where('komisiID', $id)->firstOrFail();
 
 
@@ -212,9 +216,10 @@ $anggota = Anggota::whereNull('komisiID')
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         // Temukan komisi berdasarkan ID
         $komisi = Komisi::findOrFail($id);
     
@@ -259,9 +264,10 @@ $anggota = Anggota::whereNull('komisiID')
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $komisi = Komisi::findOrFail($id);
 
 

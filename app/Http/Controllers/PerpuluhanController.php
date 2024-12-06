@@ -16,7 +16,7 @@ class PerpuluhanController extends Controller
      */
     public function index(Request $request)
 {
-    if (!Auth::check() || Auth::user()->role !== 'keuangan') {
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
     
@@ -42,9 +42,10 @@ class PerpuluhanController extends Controller
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // 
         $anggota = Anggota::all();
         if ($anggota->isEmpty()) {
@@ -60,9 +61,16 @@ class PerpuluhanController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
+
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
+        
+
         $perpuluhan = new Kas();
 $perpuluhan->anggotaID = $request->anggotaID;
 $perpuluhan->jumlahUang = $request->jumlahUang;
@@ -78,28 +86,13 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    //     $perpuluhan = Kas::with(['anggota'])->findOrFail($id);    
-        
-
-    //     return view('perpuluhan.show', compact('perpuluhan'));
-    // }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $perpuluhan = Kas::where('kasID', $id)->firstOrFail();
         $anggotaTerpilih = Anggota::where('anggotaID', $perpuluhan->anggotaID)->first();
         $anggota = Anggota::all();
@@ -117,16 +110,15 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // Validasi data yang masuk
         $request->validate([
-            'anggotaID' => 'required',
-            'tanggal' => 'required|date',
-            'jumlahUang' => 'required|numeric', // Pastikan jumlahUang adalah angka
+            'jumlahUang' => 'required|integer|min:1',
         ]);
-    
+
         $perpuluhan = Kas::findOrFail($id);
     
         // Mengubah nilai jumlahUang menjadi integer jika perlu
@@ -143,9 +135,10 @@ return redirect()->route('perpuluhan')->with('success', 'Perpuluhan added succes
      */
     public function destroy(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $perpuluhan = Kas::findOrFail($id);
   
         $perpuluhan->delete();

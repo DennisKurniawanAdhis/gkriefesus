@@ -28,9 +28,10 @@ class KolekteController extends Controller
 public function index(Request $request)
 {
 
-    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
+    
     // Query dasar untuk data kolekte
     $query = Kas::with('jenisIbadah')->where('jenisUang', 'kolekte');
 
@@ -57,9 +58,10 @@ public function index(Request $request)
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // 
         $ibadah = Ibadah::with(['jenisIbadah'])
     ->whereNotExists(function ($query) {
@@ -81,9 +83,13 @@ public function index(Request $request)
 
     public function store(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
         // Ambil data ibadah berdasarkan dataIbadahID yang dipilih
         $ibadah = Ibadah::with('jenisIbadah')->find($request->dataIbadahID);
         
@@ -103,48 +109,13 @@ public function index(Request $request)
         return redirect()->route('kolekte')->with('success', 'Kolekte added successfully');
     }
 
-// public function store(Request $request)
-// {
-//     // Validasi data
-//     $request->validate([
-//         'dataIbadahID' => 'required|exists:ibadah,dataIbadahID', // Pastikan ID valid
-//         'jumlahUang' => 'required|numeric|min:0', // Validasi jumlah uang
-//         'tanggalIbadah' => 'required|date', // Validasi tanggal
-//     ]);
 
-//     // Membuat instance baru untuk menyimpan kolekte
-//     $kolekte = new Kas();
-//     $kolekte->dataIbadahID = $request->dataIbadahID; // Menggunakan nama yang konsisten
-//     $kolekte->jumlahUang = $request->jumlahUang;
-//     $kolekte->jenisUang = 'kolekte';
-//     $kolekte->tanggal = $request->tanggalIbadah; // Simpan tanggal Ibadah dari form
-//     $kolekte->save(); // Simpan data kolekte
-
-//     return redirect()->route('kolekte')->with('success', 'Kolekte added successfully');
-// }
-
-
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    //     $kolekte = Kas::with(['jenisIbadah'])->findOrFail($id);    
-        
-
-    //     return view('kolekte.show', compact('kolekte'));
-    // }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // Ambil data kolekte yang akan diedit beserta relasinya
         $kolekte = Kas::with(['ibadah.jenisIbadah'])->where('kasID', $id)->firstOrFail();
     
@@ -174,9 +145,15 @@ public function index(Request $request)
      */
     public function update(Request $request, string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
+
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
+
         // Validasi data yang masuk
         $kolekte = Kas::findOrFail($id);
     
@@ -194,9 +171,10 @@ public function index(Request $request)
      */
     public function destroy(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $kolekte = Kas::findOrFail($id);
   
         $kolekte->delete();

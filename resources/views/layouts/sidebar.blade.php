@@ -18,6 +18,22 @@
       </a>
   </li>
 
+
+
+<li class="nav-item {{ Request::is('anggota') ? 'active' : '' }}">
+  <a class="nav-link" href="{{ route('keanggotaan') }}">
+      <i class="fa-solid fa-user"></i>
+      <span>Keanggotaan</span>
+  </a>
+</li>
+
+<li class="nav-item {{ Request::is('anggota') ? 'active' : '' }}">
+  <a class="nav-link" href="{{ route('keuangan') }}">
+      <i class="fa-solid fa-user"></i>
+      <span>Keuangan</span>
+  </a>
+</li>
+
   <li class="nav-item">
     <a class="nav-link" href="#" onclick="confirmLogout(event)">
         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

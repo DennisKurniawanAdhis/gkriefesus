@@ -30,9 +30,10 @@ class PendetaController extends Controller
     public function index(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         // Cek apakah ada input pencarian dari user
         $search = $request->input('search');
     
@@ -50,10 +51,12 @@ class PendetaController extends Controller
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         
+
         $jenisKelamin = Pendeta::jenisKelamin;
         $statusKawin = Pendeta::statusKawin;
         // $jenisIbadah = JenisIbadah::all();
@@ -67,9 +70,21 @@ class PendetaController extends Controller
      */
     public function store(Request $request)
 {
-    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
+
+
+    $request->validate([
+        //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+           'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+           'noTelp' => 'required|regex:/^[0-9]{1,13}$/|max:13',
+           'NIK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+           'noKK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+        ]);
+
     $lastPendeta = \App\Models\Pendeta::orderBy('pendetaID', 'desc')->first();
 
     // Jika ada pendetaID terakhir, ekstrak bagian numerik dan tambahkan 1
@@ -120,32 +135,13 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
 }
 
   
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     $pendeta = Pendeta::findOrFail($id);
-    //     $alamat = $pendeta->alamat;
 
-    //     // $jenisIbadah = JenisIbadah::withCount(['ibadah' => function ($query) use ($pendeta) {
-    //     //     $query->where('pendetaID', $pendeta->pendetaID);
-    //     // }])->get();
-
-    //     // $jumlahPernikahan = Pernikahan::where('pendetaID', $pendeta->pendetaID)->count();
-    //     // $jumlahBaptis = CalonBaptis::where('pendetaID', $pendeta->pendetaID)->count();
-      
-    //     return view('pendeta.show', compact('pendeta','alamat'));
-    // }
-  
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $pendeta = Pendeta::where('pendetaID', $id)->firstOrFail();
         $jenisKelamin = Pendeta::jenisKelamin;
         $statusKawin = Pendeta::statusKawin;
@@ -161,9 +157,20 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
+        $request->validate([
+            //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+               'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+               'noTelp' => 'required|regex:/^[0-9]{1,13}$/|max:13',
+               'NIK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+               'noKK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+            ]);
+            
         $pendeta = Pendeta::findOrFail($id);
         
         $pendeta->update($request->all());
@@ -184,9 +191,10 @@ return redirect()->route('pendeta')->with('success', 'Pendeta added successfully
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $pendeta = Pendeta::findOrFail($id);
         
         $relatedRecords = Pernikahan::where('pendetaID', $id)->count();

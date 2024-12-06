@@ -15,7 +15,7 @@ class KeahlianController extends Controller
     public function index()
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
 
@@ -29,7 +29,7 @@ class KeahlianController extends Controller
     public function create()
     {
 
-            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         return view('keahlian.create');
@@ -41,7 +41,7 @@ class KeahlianController extends Controller
     public function store(Request $request)
     {
 
-            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
 
@@ -86,7 +86,7 @@ class KeahlianController extends Controller
     public function edit(string $id)
     {
 
-            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         $keahlian = Keahlian::findOrFail($id);
@@ -100,7 +100,7 @@ class KeahlianController extends Controller
     public function update(Request $request, string $id)
     {
 
-            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         $keahlian = Keahlian::findOrFail($id);
@@ -115,8 +115,7 @@ class KeahlianController extends Controller
      */
     public function destroy(string $id)
     {
-
-            if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         // Cek apakah keahlian yang ingin dihapus adalah K001

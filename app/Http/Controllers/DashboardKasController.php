@@ -14,9 +14,10 @@ class DashboardKasController extends Controller
     public function index(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         
         // Set tanggal default jika tidak ada filter
         $tanggalAwal = $request->input('tanggalAwal') ? 

@@ -16,9 +16,10 @@ class IbadahController extends Controller
     public function index(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         
         // Ambil parameter filter dari request
         $jenisIbadahID = $request->get('ibadahID');
@@ -51,9 +52,10 @@ class IbadahController extends Controller
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
     
         $pendeta = Pendeta::all();
         $ibadah = JenisIbadah::all();
@@ -71,9 +73,10 @@ class IbadahController extends Controller
     public function store(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         //
 $ibadah = new Ibadah();
 $ibadah->ibadahID = $request->ibadahID;
@@ -106,9 +109,10 @@ return redirect()->route('ibadah')->with('success', 'Ibadah added successfully')
     public function edit(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
 
         $dataIbadah = Ibadah::where('dataIbadahID', $id)->firstOrFail();
 
@@ -137,9 +141,10 @@ return redirect()->route('ibadah')->with('success', 'Ibadah added successfully')
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         //
         $dataIbadahID = Ibadah::findOrFail($id);
         
@@ -155,9 +160,10 @@ return redirect()->route('ibadah')->with('success', 'Ibadah added successfully')
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         
         $dataIbadah = Ibadah::findOrFail($id);
 

@@ -23,7 +23,7 @@ class PernikahanController extends Controller
 
     public function index()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
 
@@ -42,10 +42,10 @@ class PernikahanController extends Controller
     public function create()
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
-        //
+
         $pendeta = Pendeta::all();
 
         $pria = Anggota::where('jenisKelamin', 'pria')
@@ -83,9 +83,17 @@ class PernikahanController extends Controller
     public function store(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
+        $request->validate([
+            //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+               'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+            ]);
+
         $lastPernikahan = Pernikahan::orderBy('pernikahanID', 'desc')->first();
         if ($lastPernikahan) {
             // Ekstrak bagian numerik dari ibadahID
@@ -147,9 +155,10 @@ return redirect()->route('pernikahan')->with('success', 'Pernikahan added succes
      */
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
 
           // Ambil data pernikahan berdasarkan pernikahanID
     // $pernikahan = Pernikahan::where('pernikahanID', $id)->firstOrFail();
@@ -191,23 +200,7 @@ $pernikahan = Pernikahan::with(['suami', 'istri'])->find($id);
         ->get();
 
 
-    // // Ambil semua pria dari tabel Anggota untuk dropdown
-    // $pria = Anggota::where('jenisKelamin', 'pria')
-    //     ->whereNotIn('anggotaID', function($query) {
-    //         $query->select('anggotaID_suami')->from('pernikahan');
-    //     })
-    //     ->get();
 
-    // // Ambil data istri yang telah dipilih
-    // $istriTerpilih = Anggota::where('jenisKelamin', 'wanita')
-    // ->get();
-
-    // // Ambil semua wanita untuk dropdown
-    //   $wanita = Anggota::where('jenisKelamin', 'wanita')
-    //     ->whereNotIn('anggotaID', function($query) {
-    //         $query->select('anggotaID_istri')->from('pernikahan');
-    //     })
-    //     ->get();
 
     $alamatPernikahan = $pernikahan->alamat; 
 
@@ -222,10 +215,18 @@ $pernikahan = Pernikahan::with(['suami', 'istri'])->find($id);
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
-        //
+
+        
+        $request->validate([
+            //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+               'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+               'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+            ]);
+
         $pernikahan = Pernikahan::findOrFail($id);
         
         $pernikahan->update($request->all());
@@ -247,9 +248,10 @@ $pernikahan = Pernikahan::with(['suami', 'istri'])->find($id);
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $pernikahan = Pernikahan::findOrFail($id);
   
         $pernikahan->delete();

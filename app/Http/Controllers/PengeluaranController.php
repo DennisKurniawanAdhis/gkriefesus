@@ -26,9 +26,10 @@ class PengeluaranController extends Controller
     public function index(Request $request)
 {
     
-    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
+    
 
     // Query dasar untuk data pengeluaran
     $query = Pengeluaran::with('jenisIbadah');
@@ -64,9 +65,10 @@ class PengeluaranController extends Controller
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // 
         $ibadah = JenisIbadah::all();
 
@@ -79,14 +81,13 @@ class PengeluaranController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // Validasi input
         $request->validate([
-           
-            'jumlahUang' => 'required|numeric',
-            'deskripsi' => 'nullable|string|max:255'
+            'jumlahUang' => 'required|integer|min:1',
         ]);
     
         // Cek jika jenis pengeluaran adalah 'kas'
@@ -102,7 +103,7 @@ class PengeluaranController extends Controller
         } else {
             // Jika bukan kas, pastikan ibadahID valid
             $request->validate([
-                'ibadahID' => 'required|exists:jenisibadah,ibadahID' // Validasi ibadahID jika tidak kas
+                'ibadahID' => 'required|exists:jenisIbadah,ibadahID' // Validasi ibadahID jika tidak kas
             ]);
     
             // Ambil nama ibadah berdasarkan ibadahID
@@ -140,9 +141,10 @@ class PengeluaranController extends Controller
      */
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         // Temukan pengeluaran berdasarkan ID
         $pengeluaran = Pengeluaran::findOrFail($id);
         // Ambil semua jenis ibadah
@@ -160,16 +162,13 @@ class PengeluaranController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
-
-        // Validasi data yang masuk
-        // $request->validate([
-        //     'tanggal' => 'required|date',
-        //     // 'jumlahUang' => 'required|numeric',
-        //     'deskripsi' => 'nullable|string|max:255'
-        // ]);
+        
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
     
         // Temukan pengeluaran yang ingin diupdate
         $pengeluaran = Pengeluaran::findOrFail($id);
@@ -187,7 +186,7 @@ class PengeluaranController extends Controller
         } else {
             // Jika bukan kas, pastikan ibadahID valid
             $request->validate([
-                'ibadahID' => 'required|exists:jenisibadah,ibadahID' // Validasi ibadahID jika tidak kas
+                'ibadahID' => 'required|exists:jenisIbadah,ibadahID' // Validasi ibadahID jika tidak kas
             ]);
     
             // Ambil nama ibadah berdasarkan ibadahID
@@ -213,9 +212,10 @@ class PengeluaranController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $pengeluaran = Pengeluaran::findOrFail($id);
   
         $pengeluaran->delete();

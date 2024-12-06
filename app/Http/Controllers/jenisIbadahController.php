@@ -20,9 +20,9 @@ class jenisIbadahController extends Controller
      */
     public function index()
     {        
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
-        return redirect()->back();
-    }
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
+            return redirect()->back();
+        }
 
         $jenisIbadah = jenisIbadah::simplePaginate(5);
       
@@ -36,7 +36,7 @@ class jenisIbadahController extends Controller
 
     {   
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         $hari = JenisIbadah::hari;
@@ -49,7 +49,7 @@ class jenisIbadahController extends Controller
     public function store(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
 
@@ -105,7 +105,7 @@ class jenisIbadahController extends Controller
     public function edit(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+       if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         $hari = JenisIbadah::hari;
@@ -122,7 +122,7 @@ class jenisIbadahController extends Controller
     public function update(Request $request, string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         $jenisIbadah = JenisIbadah::findOrFail($id);
@@ -138,7 +138,7 @@ class jenisIbadahController extends Controller
     public function destroy(string $id)
     {
 
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
         if ($id === 'B001') {

@@ -11,7 +11,10 @@
         <!-- Username -->
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" id="username" placeholder="Nama Depan" value="{{ $admin->username }}" required>
+            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="username" placeholder="Username" value="{{ $admin->username }}" required>
+            @error('username')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
         </div>
 
         <!-- Password -->

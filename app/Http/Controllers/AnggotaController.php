@@ -42,9 +42,14 @@ class AnggotaController extends Controller
     }
     public function index(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
+        // if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        //     return redirect()->back();
+        // }
+        
         // Cek apakah ada input pencarian dari user
         $search = $request->input('search');
     
@@ -71,9 +76,15 @@ class AnggotaController extends Controller
     public function create()
     {
         
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        // if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        //     return redirect()->back();
+        // }
+
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $jenisKelamin = Anggota::jenisKelamin;
         $statusKawin = Anggota::statusKawin;
         $jenisIbadah = JenisIbadah::all();
@@ -87,10 +98,24 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
 {
-    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+    // if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+    //     return redirect()->back();
+    // }
+
+    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
  
+    $request->validate([
+        //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+           'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+           'noTelp' => 'required|regex:/^[0-9]{1,13}$/|max:13',
+           'NIK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+           'noKK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+        ]);
+
     $lastAnggota = Anggota::orderBy('anggotaID', 'desc')->first();
     if ($lastAnggota) {
         // Ekstrak bagian numerik dari ibadahID
@@ -159,21 +184,21 @@ if ($request->has('keahlian')) {
             'keahlianID' => $keahlianID,  // Data keahlianID dari form
         ]);
     }
-
-    
 }
 
 return redirect()->route('anggota')->with('success', 'Anggota added successfully');
 
 }
-
-  
-
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        // if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        //     return redirect()->back();
+        // }
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $anggota = Anggota::where('anggotaID', $id)->firstOrFail();
         $jenisKelamin = Anggota::jenisKelamin;
         $statusKawin = Anggota::statusKawin;
@@ -224,9 +249,31 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
      */
     public function update(Request $request, string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
-            return redirect()->back();
-        }
+    //     if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+    //         return redirect()->back();
+    // }
+
+    if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
+        return redirect()->back();
+    }
+
+    $request->validate([
+        //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+           'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'RW' => 'required|regex:/^(?!000$)\d{1,3}$/',
+           'kodePos' => 'required|regex:/^[0-9]{1,5}$/|max:5',
+           'noTelp' => 'required|regex:/^[0-9]{1,13}$/|max:13',
+           'NIK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+           'noKK' => 'required|regex:/^[0-9]{1,18}$/|max:18',
+        ]);
+
+        $request->validate([
+        //    'RT' => ['required', 'regex:/^(?!000$)\d{1,3}$/']
+           'RT' => 'required|regex:/^(?!000$)\d{1,3}$/',
+        ]);
+
+        // regex:/^[0-9]{1,3}$/
+
         $anggota = Anggota::findOrFail($id);
         
         $anggota->update($request->all());
@@ -248,9 +295,14 @@ return redirect()->route('anggota')->with('success', 'Anggota added successfully
      */
     public function destroy(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        // if (!Auth::check() || Auth::user()->role !== 'keanggotaan' ) {
+        //     return redirect()->back();
+        // }
+
+        if (!Auth::check() || Auth::user()->role !== 'keanggotaan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+
         $anggota = Anggota::findOrFail($id);
 
         if ($anggota->komisiID !== null) {

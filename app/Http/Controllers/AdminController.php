@@ -1,11 +1,14 @@
 <?php
 
 
+
+
   namespace App\Http\Controllers;
   use Illuminate\Support\Facades\Auth;
   use Illuminate\Http\Request;
   use Illuminate\Foundation\Auth\User;
   use Illuminate\Support\Facades\Hash;
+  use Illuminate\Validation\Rule;
   
   class AdminController extends Controller
   {
@@ -47,7 +50,7 @@
             return redirect()->back();
         }
         $validatedData = $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
             'password' =>  [
               'required',
               'string',
@@ -55,6 +58,7 @@
               'regex:/[A-Z]/'
             ],
         ], [
+            'username.unique' => 'Username sudah digunakan, Silakan pilih username lain.',
             'password.required' => 'Password diperlukan.',
             'password.min' => 'Password harus minimal 6 karakter.',
             'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
@@ -112,28 +116,28 @@
         }
         $admin = User::findOrFail($id);
 
-        if (Auth::id() == $id && Auth::user()->role === 'super') {
-            
-        if ($request->has('role') && $request->role !== $admin->role) {
-            return redirect()->route('admin')->with('error', 'Tidak dapat mengubah data admin super.');
-        }
-    }
+       
 
-          $validatedData = $request->validate([
-              'username' => 'required|string|max:255',
-              'password' => [
-                  'required',
-                  'string',
-                  'min:6',
-                  'regex:/[A-Z]/'
-              ],
-              'role' => 'required|string', // Add role validation
-          ], [
-              'password.required' => 'Password diperlukan.',
-              'password.min' => 'Password harus minimal 6 karakter.',
-              'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
-              'role.required' => 'Role harus dipilih.', // Add role error message
-          ]);
+    $validatedData = $request->validate([
+        'username' => [
+            'required', 
+            'string', 
+            'max:255', 
+            Rule::unique('users', 'username')->ignore($id)
+        ],
+        'password' =>  [
+            'required',
+            'string',
+            'min:6',
+            'regex:/[A-Z]/'
+        ],
+        'role' => 'required|string|in:keanggotaan,keuangan,super', // Add this line
+    ], [
+        'username.unique' => 'Username sudah digunakan, Silakan pilih username lain.',
+        'password.required' => 'Password diperlukan.',
+        'password.min' => 'Password harus minimal 6 karakter.',
+        'password.regex' => 'Password harus mengandung setidaknya satu huruf besar.',
+    ]);
       
         
 

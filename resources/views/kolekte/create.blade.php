@@ -16,7 +16,7 @@
             <div class="col-md-4">
                 <select name="dataIbadahID" class="form-select" id="dataIbadahID" required>
                     @foreach ($ibadah as $p)
-                        <option value="{{ $p->dataIbadahID }}">
+                        <option value="{{ $p->dataIbadahID }}" {{ old('dataIbadahID') == $p->dataIbadahID ? 'selected' : '' }}>
                             Ibadah {{ $p->jenisIbadah->namaIbadah }} - {{ $p->tanggalIbadah }} 
                         </option>
                     @endforeach
@@ -24,13 +24,18 @@
             </div>
         </div>
 
-    <div class="mb-3">
-        <label for="jumlahUang" class="form-label">Jumlah Uang</label>
-        <div class="input-group">
-            <span class="input-group-text">Rp.</span>
-            <input type="number" name="jumlahUang" class="form-control" id="jumlahUang" placeholder="Jumlah Uang" oninput="formatRupiah(this)" required>
+        <div class="mb-3">
+            <label for="jumlahUang" class="form-label">Jumlah Uang</label>
+            <div class="input-group">
+                <span class="input-group-text">Rp.</span>
+                <input type="number" name="jumlahUang" class="form-control @error('jumlahUang') is-invalid @enderror" id="jumlahUang" placeholder="Jumlah Uang" oninput="formatRupiah(this)" value="{{ old('jumlahUang') }}" required>
+            </div>
+            @error('jumlahUang')
+            <div class="alert alert-warning" role="alert">
+                <span class="font-medium">{{ $message }}</span>
+            </div>
+        @enderror
         </div>
-    </div>
     
     
 

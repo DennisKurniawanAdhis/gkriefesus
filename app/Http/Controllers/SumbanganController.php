@@ -15,9 +15,10 @@ class SumbanganController extends Controller
      */
     public function index()
 {
-    if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+    if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
         return redirect()->back();
     }
+    
     
     $sumbangan = Kas::where('jenisUang', 'sumbangan')->simplePaginate(5);
     return view('sumbangan.index', compact('sumbangan'));
@@ -29,9 +30,10 @@ class SumbanganController extends Controller
      */
     public function create()
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
        
         return view('sumbangan.create');
 
@@ -42,9 +44,13 @@ class SumbanganController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
         
         $sumbangan = new Kas();
 $sumbangan->namaPenyumbang = $request->namaPenyumbang;
@@ -65,18 +71,6 @@ return redirect()->route('sumbangan')->with('success', 'Sumbangan added successf
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
-            return redirect()->back();
-        }
-        //
-        $sumbangan = Kas::findOrFail($id);
-
-        
-
-        return view('sumbangan.show', compact('sumbangan'));
-    }
 
 
     /**
@@ -84,9 +78,10 @@ return redirect()->route('sumbangan')->with('success', 'Sumbangan added successf
      */
     public function edit(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $sumbangan = Kas::where('kasID', $id)->firstOrFail();
        
         $jumlahUangFormatted = intval($sumbangan->jumlahUang);
@@ -100,9 +95,13 @@ return redirect()->route('sumbangan')->with('success', 'Sumbangan added successf
      */
     public function update(Request $request, string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
+        $request->validate([
+            'jumlahUang' => 'required|integer|min:1',
+        ]);
         // Validasi data yang masuk
         $request->validate([
     
@@ -127,9 +126,10 @@ return redirect()->route('sumbangan')->with('success', 'Sumbangan added successf
      */
     public function destroy(string $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'keuangan' ) {
+        if (!Auth::check() || Auth::user()->role !== 'keuangan' && Auth::user()->role !== 'super' ) {
             return redirect()->back();
         }
+        
         $sumbangan = Kas::findOrFail($id);
   
         $sumbangan->delete();
